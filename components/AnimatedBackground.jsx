@@ -2,9 +2,9 @@
 // components/AnimatedBackground.jsx
 import React from "react";
 
-const HEART_COUNT = 14;
+const HEART_COUNT = 24; // increased for more density
 
-// tiny pixel-heart SVG encoded for inline use
+// pixel-heart SVG
 const pixelHeartSvg = `
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
   <g fill='none' fill-rule='evenodd'>
@@ -30,30 +30,29 @@ export default function AnimatedBackground() {
   const hearts = new Array(HEART_COUNT).fill(0).map((_, i) => {
     return {
       id: i,
-      top: Math.round(rand(5, 90)),       // % from top
-      size: Math.round(rand(20, 48)),     // px size
-      duration: rand(12, 26),             // seconds per loop
-      delay: rand(-10, 0),                // stagger start
-      opacity: Number(rand(0.3, 0.9).toFixed(2)),
-      rotate: Math.round(rand(-12, 12)),  // rotation
+      top: Math.round(rand(5, 90)),      // % from top
+      size: Math.round(rand(28, 60)),    // bigger size range
+      duration: rand(12, 26),            // seconds per loop
+      delay: rand(-10, 0),               // stagger start
+      rotate: Math.round(rand(-12, 12)), // rotation
     };
   });
 
   return (
     <div className="animated-bg" aria-hidden>
-      {/* keep your soft blobs */}
+      {/* blobs you already had */}
       <div className="blob blob1" />
       <div className="blob blob2" />
       <div className="blob blob3" />
       <div className="bg-noise" />
 
-      {/* pixel hearts layer */}
+      {/* hearts layer */}
       <div className="hearts-container">
         <style>{`
           @keyframes heartMove {
-            0%   { transform: translateX(-20vw) rotate(var(--rot)); opacity: var(--o); }
-            50%  { opacity: calc(var(--o) + 0.1); }
-            100% { transform: translateX(110vw) rotate(var(--rot)); opacity: var(--o); }
+            0%   { transform: translateX(-20vw) rotate(var(--rot)); opacity: 1; }
+            50%  { opacity: 1; }
+            100% { transform: translateX(110vw) rotate(var(--rot)); opacity: 1; }
           }
         `}</style>
 
@@ -67,11 +66,9 @@ export default function AnimatedBackground() {
               width: `${h.size}px`,
               height: `${h.size}px`,
               backgroundImage: `url("data:image/svg+xml;utf8,${pixelHeartData}")`,
-              opacity: h.opacity,
               transform: `rotate(${h.rotate}deg)`,
               animation: `heartMove ${h.duration}s linear ${h.delay}s infinite`,
               "--rot": `${h.rotate}deg`,
-              "--o": h.opacity,
             }}
           />
         ))}
