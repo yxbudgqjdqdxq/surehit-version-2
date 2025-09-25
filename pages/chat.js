@@ -1,6 +1,6 @@
 
-// pages/chat.js  (frontend) — REPLACE your current frontend with this
-import React, { useState, useRef, useEffect } from "react";
+// pages/chat.js
+import React, { useState, useEffect, useRef } from "react";
 
 export default function ChatPage() {
   const [input, setInput] = useState("");
@@ -9,9 +9,11 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [lastMessage, setLastMessage] = useState("");
+  const [emptyClickCount, setEmptyClickCount] = useState(0);
+  const [lastSentText, setLastSentText] = useState("");
   const cardRef = useRef(null);
 
-  // local mood detection (same as backend)
+  // mood detection
   function detectMoodLocal(text) {
     const t = (text || "").toLowerCase();
     if (/(sad|tired|down|cry|hurt|lonely|gloomy|blue|bummed|drained|weary)/.test(t)) return "sad";
@@ -26,126 +28,184 @@ export default function ChatPage() {
     return "neutral";
   }
 
-  // robust fetch to /api/chat — it expects { message }
-  async function fetchReply(messageToSend) {
+  // emoji-only detection (basic): if no alphanumeric characters, treat as emoji-only
+  function isEmojiOnly(str) {
+    if (!str) return false;
+    // if contains any letter/number, it's not emoji-only
+    if (/[A-Za-z0-9]/.test(str)) return false;
+    // treat other-letters as alpha too (unicode letters)
+    if (/\p{Letter}/u.test(str)) return false;
+    // if contains non-space characters but no letters/numbers treat as emoji/symbols
+    return /\S/.test(str);
+  }
+
+  // ensure full-screen gradient for PC: apply to body
+  useEffect(() => {
+    const gradients = {
+      sad: "linear-gradient(135deg,#cfe0ff,#9fb7ff)",
+      grumpy: "linear-gradient(135deg,#ffdbe6,#ffb3d6)",
+      happy: "linear-gradient(135deg,#fff0b8,#ffd6a5)",
+      love: "linear-gradient(135deg,#ffd6e8,#ff9ab6)",
+      deep: "linear-gradient(135deg,#d8f3ff,#cde6ff)",
+      neutral: "linear-gradient(135deg,#f0f2f5,#ffffff)",
+      bored: "linear-gradient(135deg,#f0e6ff,#e6d8ff)",
+      nervous: "linear-gradient(135deg,#fff0f0,#ffe8d9)",
+      confident: "linear-gradient(135deg,#ffd1b8,#ffb3b3)",
+      playful: "linear-gradient(135deg,#f0d8ff,#e6f0ff)"
+    };
+    const g = gradients[mood] || gradients.neutral;
+    document.body.style.background = g;
+    document.body.style.transition = "background 600ms ease";
+    return () => {
+      // leave background as-is; this is fine for your app's single-page usage
+    };
+  }, [mood]);
+
+  async function callApi(message) {
     setError(null);
     setLoading(true);
     try {
-      const r = await fetch("/api/chat", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: messageToSend || "" })
+        body: JSON.stringify({ message: message || "" })
       });
 
-      // If not JSON, read text to reveal server error (helps debug)
-      const ct = r.headers.get("content-type") || "";
-      if (!r.ok) {
-        // capture body as text to show server's error if any
-        const text = await r.text();
-        throw new Error(`Server error ${r.status}: ${text}`);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Server error: ${txt}`);
       }
-
-      if (ct.includes("application/json")) {
-        const data = await r.json();
-        setReply(data.reply || "…");
-        setMood(data.mood || detectMoodLocal(messageToSend));
-      } else {
-        // server returned something that's not JSON -> show it
-        const text = await r.text();
-        throw new Error("Non-JSON response: " + text);
-      }
+      const data = await res.json();
+      return data.reply ?? "";
     } catch (err) {
-      console.error("fetchReply error:", err);
+      console.error("API error:", err);
       setError(String(err));
+      return null;
     } finally {
       setLoading(false);
-      // animate card for UX
-      if (cardRef.current) {
-        cardRef.current.animate(
-          [{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }],
-          { duration: 420, easing: "cubic-bezier(.2,.9,.2,1)" }
-        );
-      }
     }
   }
 
   useEffect(() => {
-    // initial load: get a default line (backend will fallback to neutral)
-    fetchReply("");
+    // initial fetch
+    (async () => {
+      const initial = await callApi("");
+      if (initial) setReply(initial);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSend = async (e) => {
     e && e.preventDefault();
+    setError(null);
     const text = input.trim();
+
+    // EMPTY behavior: count clicks
     if (!text) {
-      await fetchReply(lastMessage || "");
+      const next = emptyClickCount + 1;
+      setEmptyClickCount(next);
+      if (next >= 2) {
+        setReply("say something my love");
+        setEmptyClickCount(0);
+      } else {
+        setReply("Tap once more and say something, babe.");
+      }
       return;
     }
+
+    // EMOJI ONLY behavior
+    if (isEmojiOnly(text)) {
+      setReply("Sorry?");
+      setInput("");
+      return;
+    }
+
+    // prevent identical repeat spam
+    if (text === lastSentText) {
+      setReply("say something my love");
+      setInput("");
+      return;
+    }
+
+    setLastSentText(text);
     setLastMessage(text);
     setInput("");
     setMood(detectMoodLocal(text));
-    await fetchReply(text);
+    setLoading(true);
+
+    const r = await callApi(text);
+    if (r !== null) {
+      setReply(r);
+    } else {
+      setReply("Sorry — couldn't fetch a reply.");
+    }
+
+    if (cardRef.current) {
+      cardRef.current.animate(
+        [{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }],
+        { duration: 420, easing: "cubic-bezier(.2,.9,.2,1)" }
+      );
+    }
   };
 
   const handleAnother = async () => {
-    await fetchReply(lastMessage || "");
+    const target = lastMessage || "";
+    setMood(detectMoodLocal(target));
+    setLoading(true);
+    const r = await callApi(target);
+    if (r !== null) setReply(r);
+    setLoading(false);
   };
-
-  const gradients = {
-    sad: "linear-gradient(135deg,#1f3a93,#3a6073)",
-    grumpy: "linear-gradient(135deg,#3b0a3b,#872657)",
-    happy: "linear-gradient(135deg,#ffefba,#ffd1ff)",
-    love: "linear-gradient(135deg,#ff9a9e,#fecfef)",
-    deep: "linear-gradient(135deg,#2b5876,#4e4376)",
-    neutral: "linear-gradient(135deg,#f0f2f5,#ffffff)",
-    bored: "linear-gradient(135deg,#d7d2cc,#304352)",
-    nervous: "linear-gradient(135deg,#ffd89b,#19547b)",
-    confident: "linear-gradient(135deg,#f7797d,#FBD786)",
-    playful: "linear-gradient(135deg,#fbc2eb,#a6c1ee)"
-  };
-
-  const currentGradient = gradients[mood] || gradients.neutral;
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, background: currentGradient, transition: "background 600ms ease" }}>
-      <div style={{ width: "100%", maxWidth: 820, margin: "0 auto", display: "flex", flexDirection: "column", gap: 18 }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ width: "100%", maxWidth: 920 }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: 22, letterSpacing: -0.3 }}>Daily Affirmations</h1>
-            <div style={{ color: "rgba(0,0,0,0.6)", marginTop: 6, fontSize: 13 }}>For my baby — warmth, hype, and soft honesty.</div>
+            <h1 style={{ margin: 0 }}>Daily Affirmations</h1>
+            <div style={{ color: "rgba(0,0,0,0.6)", fontSize: 13 }}>For my baby — love, comfort, and endless hype.</div>
           </div>
 
-          <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 14px", borderRadius: 12, border: "none", background: "rgba(255,255,255,0.18)", backdropFilter: "blur(6px)", color: "#fff", cursor: "pointer", transition: "transform .15s ease", fontWeight: 600 }}>
+          <div>
+            <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.18)", color: "#000" }}>
               Another one
             </button>
           </div>
         </header>
 
-        <main ref={cardRef} style={{ background: "rgba(255,255,255,0.92)", borderRadius: 20, padding: "36px 28px", boxShadow: "0 20px 50px rgba(0,0,0,0.12)", minHeight: 260, display: "flex", flexDirection: "column", justifyContent: "center", transition: "transform .3s ease" }}>
+        <main ref={cardRef} style={{ background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: 30, minHeight: 240, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}>
           {loading ? (
             <div style={{ textAlign: "center", color: "#333" }}>Hypeman is thinking…</div>
           ) : (
-            <>
-              <div style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: "clamp(18px, 2.2vw, 22px)", lineHeight: 1.45, color: "#111", textAlign: "center", whiteSpace: "pre-wrap" }}>
-                {reply || "Type how you feel — I’ll say the rest."}
-              </div>
-              <div style={{ marginTop: 18, display: "flex", justifyContent: "center", gap: 12 }}>
-                <div style={{ fontSize: 13, color: "rgba(0,0,0,0.45)" }}>Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong></div>
-              </div>
-            </>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", whiteSpace: "pre-wrap" }}>
+              {reply || "Type how you feel — I’ll say the rest."}
+            </div>
           )}
+
+          <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
+            Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong>
+          </div>
         </main>
 
-        <form onSubmit={handleSend} style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <input value={input} onChange={e => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} placeholder="Type what you're feeling (eg: 'I feel tired today', 'I'm so happy')" style={{ flex: 1, padding: "14px 16px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)", fontSize: 15 }} disabled={loading} aria-label="Your message" />
-          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700, cursor: "pointer", transition: "transform .12s ease" }}>
-            {loading ? "Sending…" : (lastMessage ? "Send" : "Get one")}
+        <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 16 }}>
+          <input
+            value={input}
+            onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }}
+            placeholder="Type how you're feeling (e.g. 'i feel tired', 'i'm happy')"
+            style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }}
+            disabled={loading}
+            aria-label="Your message"
+          />
+          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>
+            {loading ? "Sending…" : "Send"}
           </button>
         </form>
 
-        {error && <div style={{ color: "crimson", fontSize: 13, whiteSpace: "pre-wrap" }}>{error}</div>}
-        <footer style={{ marginTop: 10, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Tip: Try mentioning how you feel in one sentence — the reply will match the mood.</footer>
+        {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
+
+        <footer style={{ marginTop: 16, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
+          Tip: A short sentence works best — the hypeman will pick the right mood.
+        </footer>
       </div>
     </div>
   );
