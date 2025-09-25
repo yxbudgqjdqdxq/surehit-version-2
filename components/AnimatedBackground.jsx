@@ -7,7 +7,7 @@ const SVG_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(PIXEL_HEART_S
 
 const AnimatedBackground = ({ heartCount = 16 }) => {
   const hearts = useMemo(() => {
-    // Prevent execution on the server where window is not defined
+    // This check ensures the code is SSR-safe and only runs on the client
     if (typeof window === 'undefined') {
       return [];
     }
@@ -15,7 +15,7 @@ const AnimatedBackground = ({ heartCount = 16 }) => {
     return Array.from({ length: heartCount }).map((_, i) => {
       const size = Math.random() * 24 + 12; // 12px to 36px
       const duration = Math.random() * 16 + 12; // 12s to 28s
-      const delay = Math.random() * -duration; // Start at a random point in the animation
+      const delay = Math.random() * -duration; // Start at a random point in the animation cycle
       const top = Math.random() * 100; // 0% to 100%
       const opacity = Math.random() * 0.6 + 0.36; // 0.36 to 0.96
       const rotation = Math.random() * 30 - 15; // -15deg to 15deg
@@ -38,11 +38,11 @@ const AnimatedBackground = ({ heartCount = 16 }) => {
 
   return (
     <div className="animated-bg" aria-hidden="true">
-      {/* These are the soft blob elements from the original CSS */}
+      {/* Existing soft blob elements */}
       <div className="blob blob1"></div>
       <div className="blob blob2"></div>
       <div className="blob blob3"></div>
-      <div className="blob blob4"></div>
+      <div className="bg-noise"></div>
 
       {/* Container for the hearts */}
       <div className="hearts-container">
