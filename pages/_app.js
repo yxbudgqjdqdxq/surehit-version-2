@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Pixel Heart Animation</title>
+        <title>Next.js App</title>
         <link rel="icon" href={FAVICON_DATA_URI} />
       </Head>
 
@@ -26,3 +26,4 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
