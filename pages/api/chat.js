@@ -7,6 +7,19 @@ export default async function handler(req, res) {
   const { message } = req.body || {};
   const rawText = (typeof message === "string" ? message : "").trim();
 
+  // simple emoji-only check (no letters/digits present)
+  function isEmojiOnly(str) {
+    if (!str) return false;
+    if (/[A-Za-z0-9]/.test(str)) return false;
+    // also treat other unicode letters as not emoji-only
+    if (/\p{Letter}/u.test(str)) return false;
+    return /\S/.test(str);
+  }
+
+  if (isEmojiOnly(rawText)) {
+    return res.status(200).json({ reply: "Sorry?", mood: "neutral" });
+  }
+
   // ----- Mood detection -----
   function detectMood(text) {
     const t = (text || "").toLowerCase();
@@ -32,7 +45,7 @@ export default async function handler(req, res) {
     return "neutral";
   }
 
-  // ----- Replies (200 total: 10 moods × 20 each) -----
+  // ----- Replies (your curated replies) -----
   const replies = {
     sad: [
       "heavy day huh… breathe, you’re still here tho.",
