@@ -1,18 +1,17 @@
 
 // components/AnimatedBackground.jsx
-import React from "react";
+import React, { useMemo } from "react";
 
 /**
- * AnimatedBackground:
- * - keeps your soft blobs (like your globals.css expects)
- * - adds multiple small "pixel heart" SVGs that glide from left to right in an infinite loop
+ * AnimatedBackground
+ * - soft blobs (CSS in globals.css)
+ * - floating pixel hearts (SVG data-URI) that glide left→right
  *
- * This uses inline styles and internal <style> for keyframes so you don't need to change globals.css.
+ * This is SSR-safe (only precomputes positions).
  */
 
-const HEART_COUNT = 14; // adjust if you want more/less hearts
+const HEART_COUNT = 14;
 
-// tiny pixel-heart SVG (pink) encoded as data URI later
 const pixelHeartSvg = `
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
   <g fill='none' fill-rule='evenodd'>
@@ -34,43 +33,51 @@ function rand(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-export default function AnimatedBackground() {
-  // generate heart items
-  const hearts = new Array(HEART_COUNT).fill(0).map((_, i) => {
-    const top = Math.round(rand(-6, 92)); // percent top
-    const size = Math.round(rand(18, 56));
-    const duration = rand(9, 24); // seconds
-    const delay = rand(-8, 8); // seconds
-    const opacity = Number(rand(0.14, 0.9).toFixed(2));
-    const rotate = Math.round(rand(-8, 16));
-    return { id: i, top, size, duration, delay, opacity, rotate };
-  });
+export default function AnimatedBackground({ heartCount = HEART_COUNT }) {
+  const hearts = useMemo(() => {
+    return new Array(heartCount).fill(0).map((_, i) => {
+      // keep top inside viewport so hearts are visible on desktop and mobile
+      const top = Math.round(rand(6, 86)); // percent
+      const size = Math.round(rand(20, 48)); // px
+      const duration = Number(rand(12, 28).toFixed(2)); // seconds
+      const delay = Number(rand(-10, 8).toFixed(2)); // seconds (can be negative)
+      // boost opacity floor so at least some hearts are obvious
+      const opacity = Number(rand(0.38, 0.96).toFixed(2));
+      const rotate = Math.round(rand(-12, 12));
+      return { id: i, top, size, duration, delay, opacity, rotate };
+    });
+  }, [heartCount]);
 
   return (
-    <div className="animated-bg" aria-hidden>
-      {/* preserve your blobs for original look */}
+    <div className="animated-bg" aria-hidden="true">
+      {/* preserve your soft blobs for depth */}
       <div className="blob blob1" />
       <div className="blob blob2" />
       <div className="blob blob3" />
       <div className="bg-noise" />
 
-      {/* hearts layer */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}>
+      {/* hearts layer (absolute full-cover) */}
+      <div
+        className="hearts-layer"
+        style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}
+        aria-hidden="true"
+      >
         <style>{`
           @keyframes heartMove {
-            0% { transform: translateX(-28vw) translateZ(0) rotate(var(--rot)); opacity: var(--o); }
-            50% { transform: translateX(42vw) translateZ(0) rotate(calc(var(--rot) + 8deg)); opacity: calc(var(--o) + 0.06); }
-            100% { transform: translateX(110vw) translateZ(0) rotate(var(--rot)); opacity: var(--o); }
+            0% { transform: translateX(0) translateZ(0) rotate(var(--rot)); opacity: var(--o); }
+            50% { opacity: calc(var(--o) + 0.06); }
+            100% { transform: translateX(140vw) translateZ(0) rotate(calc(var(--rot) + 18deg)); opacity: 0; }
           }
         `}</style>
 
         {hearts.map(h => (
           <div
             key={h.id}
+            className="heart"
             style={{
               position: "absolute",
               top: `${h.top}%`,
-              left: `-20vw`,
+              left: `-28vw`,
               width: `${h.size}px`,
               height: `${h.size}px`,
               backgroundImage: `url("data:image/svg+xml;utf8,${pixelHeartData}")`,
@@ -79,8 +86,15 @@ export default function AnimatedBackground() {
               opacity: h.opacity,
               transform: `translateX(0) rotate(${h.rotate}deg)`,
               animation: `heartMove ${h.duration}s linear ${h.delay}s infinite`,
+              // expose variables for the keyframe usage
+              // eslint-disable-next-line no-undef
+              // set via style --rot and --o so the keyframes can reference them
+              // (React supports custom properties via the style object)
+              // we include them here:
+              ["--rot"]: `${h.rotate}deg`,
+              ["--o"]: `${h.opacity}`,
               zIndex: 0,
-              filter: "drop-shadow(0 8px 18px rgba(178,27,97,0.06))"
+              filter: "drop-shadow(0 10px 24px rgba(178,27,97,0.06))",
             }}
           />
         ))}
