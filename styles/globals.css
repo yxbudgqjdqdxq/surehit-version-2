@@ -14,13 +14,12 @@ html,body,#__next {
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* background gradient animation (original)
-   NOTE: z-index changed to -1 so animated layer sits above it */
+/* background gradient animation */
 body::before{
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1; /* moved behind animated hearts */
+  z-index: -2;
   background: linear-gradient(120deg,#fff0f2 0%, #fff6f0 35%, #f7f6ff 70%, #f0fbff 100%);
   background-size: 600% 600%;
   animation: gradientShift 28s ease-in-out infinite;
@@ -33,7 +32,7 @@ body::before{
   100%{background-position:0% 50%}
 }
 
-/* animated blobs (original) */
+/* animated blobs */
 .animated-bg{ position: fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
 .animated-bg .blob {
   position:absolute;
@@ -168,7 +167,6 @@ body::before{
    ADDITIONS (vault, modal, hearts, affirmation fix)
    ========================= */
 
-/* Vault button (standout) */
 .vault-btn {
   display: inline-block;
   background: linear-gradient(90deg,#ff8ab1,#ff5a9e);
@@ -184,7 +182,6 @@ body::before{
 }
 .vault-btn:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(255,90,157,0.18); }
 
-/* Modal (password prompt) */
 .modal {
   position: fixed;
   inset: 0;
@@ -206,7 +203,6 @@ body::before{
 .modal h3 { margin: 0 0 8px 0; font-size: 20px; }
 .modal p { margin: 0 0 14px 0; color: rgba(0,0,0,0.6); }
 
-/* Affirmation-screen (full desktop coverage) */
 .affirmation-screen {
   width: 100vw;
   min-height: 100vh;
@@ -219,53 +215,10 @@ body::before{
   background-position: center;
 }
 
-/* small helper: graceful card enter animation */
 .fade-in-card { animation: fadeInUp 420ms cubic-bezier(.2,.9,.2,1) both; }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* === START: Corrected Heart Animation Styles === */
-
-.hearts-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.heart {
-  position: absolute;
-  left: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  opacity: 0;
-  will-change: transform, opacity;
-  animation-name: glide;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  filter: drop-shadow(0 0 4px rgba(255, 74, 74, 0.3));
-}
-
-@keyframes glide {
-  0% {
-    transform: translateX(-28vw) rotate(var(--rot));
-    opacity: 0;
-  }
-  15% {
-    opacity: var(--o);
-  }
-  85% {
-    opacity: var(--o);
-  }
-  100% {
-    transform: translateX(140vw) rotate(var(--rot));
-    opacity: 0;
-  }
-}
-
-/* Fallback class for static hearts (if JS fails) */
-.pixel-heart {
+.pixel-heart, .heart {
   position: absolute;
   width: 26px;
   height: 26px;
@@ -275,17 +228,8 @@ body::before{
   pointer-events: none;
   filter: drop-shadow(0 8px 18px rgba(178,27,97,0.06));
   transition: transform 0.2s ease-out;
-  will-change: transform, opacity;
 }
-.pixel-heart.p1 { top: 12%; left: -8%; animation: floatHeartA 13s linear infinite; }
-.pixel-heart.p2 { top: 40%; left: -14%; width: 34px; height: 34px; animation: floatHeartB 18s linear infinite; }
-.pixel-heart.p3 { top: 66%; left: -20%; animation: floatHeartC 22s linear infinite; }
 
-
-/* === END: Corrected Heart Animation Styles === */
-
-
-/* Secret paragraph / vault content */
 .secret-paragraph {
   font-size: 18px;
   line-height: 1.75;
@@ -293,12 +237,30 @@ body::before{
   white-space: pre-wrap;
 }
 
-/* Chat / affirmations tweaks (non-invasive) */
-.chat-shell { overflow: hidden; } /* ensure smooth edges */
+.chat-shell { overflow: hidden; }
 .messages { padding-right: 10px; }
 
-/* small utilities */
 .centered { display:flex; align-items:center; justify-content:center; }
 .text-muted { color: rgba(0,0,0,0.45); font-size: 13px; }
+
+/* ===== pixel hearts animation (new) ===== */
+
+.hearts-container { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: visible; }
+
+.heart {
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 8px 18px rgba(178,27,97,0.06));
+  will-change: transform, opacity;
+  pointer-events: none;
+  opacity: 0.95;
+  transform: translateZ(0);
+}
+
+@keyframes heartMove {
+  0%   { transform: translateX(0) translateY(0) rotate(var(--rot, 0deg)); opacity: var(--o, 0.9); }
+  50%  { transform: translateX(48vw) translateY(-3vh) rotate(calc(var(--rot, 0deg) + 8deg)); opacity: calc(var(--o, 0.9) - 0.06); }
+  100% { transform: translateX(120vw) translateY(-6vh) rotate(var(--rot, 0deg)); opacity: 0; }
+}
 
 /* end of file */
