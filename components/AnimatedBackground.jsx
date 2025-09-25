@@ -12,7 +12,7 @@ import React, { useEffect } from "react";
  */
 
 const HEART_COUNT = 28; // density - increase if you want more
-const DEBUG = true;     // <-- set to false after verification
+const DEBUG = false;     // <-- set to false after verification
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
