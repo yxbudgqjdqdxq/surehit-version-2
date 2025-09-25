@@ -1,102 +1,121 @@
 
 // components/AnimatedBackground.jsx
-import React from "react";
+import React, { useEffect } from "react";
 
 /**
- * AnimatedBackground (final)
- * - Pixel-heart SVG data-URI
- * - Hearts float across the screen, fully visible
- * - Hearts are above blobs (z-index:1) but behind main content (site-root z-index:2)
+ * Robust AnimatedBackground using inline <svg> hearts.
+ * - Debug mode (debug=true) uses very high z-index so hearts cannot be covered.
+ * - Production mode (debug=false) sets zIndex to 1 (above blobs, under site-root).
+ *
+ * Replace the existing file with this file, push to main, let Vercel redeploy,
+ * then hard-refresh the site and inspect DOM for "ANIM_HEART_SVG_" elements.
  */
 
-const HEART_COUNT = 28; // adjust density (28 is lively but not spammy)
-
-const pixelHeartSvg = `
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-  <g fill='none' fill-rule='evenodd'>
-    <rect width='24' height='24' fill='none'/>
-    <g transform='translate(2 2)'>
-      <rect x='2' y='2' width='3' height='3' fill='%23ff7aa8'/>
-      <rect x='5' y='2' width='3' height='3' fill='%23ff7aa8'/>
-      <rect x='8' y='3' width='3' height='3' fill='%23ff7aa8'/>
-      <rect x='2' y='5' width='9' height='3' fill='%23ff7aa8'/>
-      <rect x='3' y='8' width='7' height='3' fill='%23ff7aa8'/>
-      <rect x='4' y='11' width='5' height='3' fill='%23ff7aa8'/>
-    </g>
-  </g>
-</svg>
-`;
-const pixelHeartData = encodeURIComponent(pixelHeartSvg);
+const HEART_COUNT = 28; // density - increase if you want more
+const DEBUG = true;     // <-- set to false after verification
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
 }
 
 export default function AnimatedBackground() {
-  const hearts = new Array(HEART_COUNT).fill(0).map((_, i) => {
-    return {
-      id: i,
-      top: Math.round(rand(4, 92)),        // vertical placement in %
-      size: Math.round(rand(26, 56)),      // px
-      duration: rand(10, 26),              // seconds per loop
-      delay: rand(-12, 2),                 // start stagger
-      rotate: Math.round(rand(-18, 18)),   // rotation
-      floatAmt: Number(rand(-3, 6).toFixed(2)) // slight vertical float
-    };
-  });
+  useEffect(() => {
+    console.info("AnimatedBackground mounted - DEBUG:", DEBUG);
+  }, []);
+
+  const hearts = new Array(HEART_COUNT).fill(0).map((_, i) => ({
+    id: i,
+    top: Math.round(rand(3, 92)),
+    size: Math.round(rand(28, 66)),
+    duration: Number(rand(10, 26).toFixed(2)),
+    delay: Number(rand(-12, 2).toFixed(2)),
+    rotate: Math.round(rand(-18, 18)),
+    floatAmt: Number(rand(-6, 8).toFixed(2)),
+    // colors: choose a nice gradient mix for variety
+    colorA: ["#ff7aa8", "#ff8fb3", "#ff6fa1", "#ff9ed1"][Math.floor(rand(0,4))],
+    colorB: ["#ff9ad6", "#ffc0de", "#ffd1f0", "#ffc8e6"][Math.floor(rand(0,4))]
+  }));
+
+  // zIndex: if DEBUG true, put VERY high z-index so these cannot be hidden;
+  // otherwise put 1 (blobs are 0 and site-root is 2 per your CSS).
+  const heartsZ = DEBUG ? 999999 : 1;
 
   return (
     <div className="animated-bg" aria-hidden>
-      {/* existing soft blobs (kept for depth) */}
+      {/* keep original blurred blobs and noise so site depth is preserved */}
       <div className="blob blob1" />
       <div className="blob blob2" />
       <div className="blob blob3" />
       <div className="bg-noise" />
 
-      {/* hearts layer: above blobs but behind content */}
+      {/* hearts container */}
       <div
         className="hearts-container"
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          zIndex: 1,           // IMPORTANT: above blob layer (0) but under site-root (2)
+          zIndex: heartsZ,
           overflow: "visible"
         }}
       >
-        {/* lightweight keyframes tailored for smooth motion */}
         <style>{`
-          @keyframes heartMove {
-            0%   { transform: translateX(-24vw) translateY(0) rotate(var(--rot)); opacity: 1; }
-            25%  { transform: translateX(18vw) translateY(calc(var(--float) * -0.6px)) rotate(calc(var(--rot) + 8deg)); opacity: 1; }
-            50%  { transform: translateX(48vw) translateY(calc(var(--float) * 1px)) rotate(calc(var(--rot) + 12deg)); opacity: 1; }
-            75%  { transform: translateX(80vw) translateY(calc(var(--float) * -0.6px)) rotate(calc(var(--rot) + 6deg)); opacity: 1; }
-            100% { transform: translateX(120vw) translateY(0) rotate(var(--rot)); opacity: 1; }
+          /* smooth left-to-right path with a gentle float */
+          @keyframes heartFloat {
+            0%   { transform: translateX(-28vw) translateY(0) rotate(var(--rot)); opacity: 1; }
+            20%  { transform: translateX(12vw) translateY(calc(var(--float) * -0.6px)) rotate(calc(var(--rot) + 6deg)); opacity: 1; }
+            45%  { transform: translateX(48vw) translateY(calc(var(--float) * 1px)) rotate(calc(var(--rot) + 12deg)); opacity: 1; }
+            70%  { transform: translateX(84vw) translateY(calc(var(--float) * -0.6px)) rotate(calc(var(--rot) + 6deg)); opacity: 1; }
+            100% { transform: translateX(128vw) translateY(0) rotate(var(--rot)); opacity: 1; }
+          }
+
+          /* make sure inline svgs don't inherit weird CSS */
+          .hearts-container svg {
+            display: block;
+            will-change: transform, opacity;
+            filter: drop-shadow(0 10px 22px rgba(178,27,97,0.12));
           }
         `}</style>
 
         {hearts.map(h => (
-          <div
+          <svg
             key={h.id}
-            className="pixel-heart"
+            id={`ANIM_HEART_SVG_${h.id}`}
+            viewBox="0 0 24 24"
+            width={h.size}
+            height={h.size}
             style={{
               position: "absolute",
               top: `${h.top}%`,
-              left: `-24vw`,
-              width: `${h.size}px`,
-              height: `${h.size}px`,
-              backgroundImage: `url("data:image/svg+xml;utf8,${pixelHeartData}")`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
+              left: `-28vw`,
               transform: `rotate(${h.rotate}deg)`,
-              animation: `heartMove ${h.duration}s linear ${h.delay}s infinite`,
-              // CSS variables used by keyframes
+              animation: `heartFloat ${h.duration}s linear ${h.delay}s infinite`,
+              // CSS variables used by keyframes for each heart
               "--rot": `${h.rotate}deg`,
               "--float": `${h.floatAmt}`,
               opacity: 1,
-              willChange: "transform, opacity"
             }}
-          />
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden
+            role="img"
+          >
+            <defs>
+              <linearGradient id={`g${h.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={h.colorA}/>
+                <stop offset="100%" stopColor={h.colorB}/>
+              </linearGradient>
+            </defs>
+
+            {/* Pixel-heart constructed with rectangles so it looks pixel-art */}
+            <g transform="translate(2 2)">
+              <rect x="2" y="2" width="3" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+              <rect x="5" y="2" width="3" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+              <rect x="8" y="3" width="3" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+              <rect x="2" y="5" width="9" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+              <rect x="3" y="8" width="7" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+              <rect x="4" y="11" width="5" height="3" fill={`url(#g${h.id})`} rx="0.4" />
+            </g>
+          </svg>
         ))}
       </div>
     </div>
