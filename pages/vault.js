@@ -1,34 +1,11 @@
 // pages/vault.js
 import { useRouter } from "next/router";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function VaultPage() {
-  const router = useRouter();
-  const { auth } = router.query;
-  const allowed = String(auth) === "1";
+const CORRECT_PASSWORD = "14344";
 
-  if (!allowed) {
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-        <div style={{ maxWidth: 720, textAlign: "center", background: "#fff", padding: 30, borderRadius: 12, boxShadow: "0 18px 50px rgba(0,0,0,0.09)" }}>
-          <h2>Access Denied</h2>
-          <p style={{ color: "rgba(0,0,0,0.6)" }}>You tried to open something private. This door stays closed unless you have the key.</p>
-          <div style={{ marginTop: 18 }}>
-            <button onClick={() => router.push("/")} style={{ padding: "10px 16px", borderRadius: 10, border: "none", background: "#b21b61", color: "#fff" }}>Return home</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, background: "linear-gradient(135deg,#fff0f6,#ffeef5)" }}>
-      <div style={{ maxWidth: 900, width: "100%", background: "rgba(255,255,255,0.96)", padding: 34, borderRadius: 14, boxShadow: "0 30px 80px rgba(0,0,0,0.08)" }}>
-        <h1 style={{ marginTop: 0 }}>A Private Note</h1>
-
-        <div className="secret-paragraph" style={{ color: "rgba(0,0,0,0.7)", fontSize: 18, lineHeight: 1.8 }}>
-          {"I love you without knowing how, or when, or from where.” — Pablo Neruda
+const SECRET_PARAGRAPH = `“I love you without knowing how, or when, or from where.” — Pablo Neruda
 
 I know you’re reading this because something’s heavy right now… maybe it’s us, maybe it’s something that happened to you today, maybe it’s both. I won’t pretend I know exactly how it feels in your chest; I only trust that if you picked this up it means you needed a little anchor. Maybe my old letters don’t help in this hour. Maybe the paragraphs I wrote used to matter and don’t right now. That’s okay. You don’t have to carry how I felt then — only what helps you now.
 
@@ -45,7 +22,76 @@ And remember: working on yourself isn’t about erasing pain or pretending you w
 I love you. I always will. Not as a demand, not as a punishment, but as a fact: something steady that doesn’t require your approval to exist. Take your time. Do it your way. If you want me in the process, I’ll be there — patient, honest, and without theatrics.
 
 — Asif
-}
+`;
+
+export default function VaultPage() {
+  const router = useRouter();
+  const { auth } = router.query;
+
+  // local state auth: either from URL (?auth=1) or from password form
+  const [allowed, setAllowed] = useState(false);
+  const [pw, setPw] = useState("");
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    // If URL contains ?auth=1 we grant access immediately
+    if (String(auth) === "1") setAllowed(true);
+  }, [auth]);
+
+  function tryUnlock(e) {
+    e && e.preventDefault();
+    setErr("");
+    if (pw === CORRECT_PASSWORD) {
+      setAllowed(true);
+      setPw("");
+      // Optionally update URL so the page can be shared as open:
+      // router.replace('/vault?auth=1', undefined, { shallow: true });
+    } else {
+      setErr("Password incorrect — please try again 💔");
+      setPw("");
+    }
+  }
+
+  if (!allowed) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ maxWidth: 720, textAlign: "center", background: "#fff", padding: 30, borderRadius: 12, boxShadow: "0 18px 50px rgba(0,0,0,0.09)" }}>
+          <h2 style={{ marginTop: 0 }}>Access Vault</h2>
+          <p style={{ color: "rgba(0,0,0,0.6)" }}>This section is private. Enter the password or return home.</p>
+
+          <form onSubmit={tryUnlock} style={{ marginTop: 18, display: "flex", gap: 8, justifyContent: "center" }}>
+            <input
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+              placeholder="Enter password"
+              aria-label="vault password"
+              style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.08)", minWidth: 200 }}
+            />
+            <button type="submit" style={{ padding: "10px 14px", borderRadius: 10, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>
+              Unlock
+            </button>
+          </form>
+
+          {err && <div style={{ color: "crimson", marginTop: 12 }}>{err}</div>}
+
+          <div style={{ marginTop: 18 }}>
+            <button onClick={() => router.push("/")} style={{ padding: "10px 16px", borderRadius: 10, border: "none", background: "#eee", color: "#111", cursor: "pointer" }}>
+              Return home
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Allowed: show secret
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, background: "linear-gradient(135deg,#fff0f6,#ffeef5)" }}>
+      <div style={{ maxWidth: 900, width: "100%", background: "rgba(255,255,255,0.96)", padding: 34, borderRadius: 14, boxShadow: "0 30px 80px rgba(0,0,0,0.08)" }}>
+        <h1 style={{ marginTop: 0 }}>A Private Note</h1>
+
+        <div className="secret-paragraph" style={{ color: "rgba(0,0,0,0.7)", fontSize: 18, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+          {SECRET_PARAGRAPH}
         </div>
 
         <div style={{ marginTop: 18 }}>
