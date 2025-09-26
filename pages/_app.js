@@ -1,8 +1,11 @@
 
 // pages/_app.js
 import Head from "next/head";
+import Script from "next/script";
 import AnimatedBackground from "../components/AnimatedBackground";
 import "../styles/globals.css";
+
+const GA_MEASUREMENT_ID = "G-VFD4DC3SSE";
 
 export default function MyApp({ Component, pageProps }) {
   const faviconSvg = encodeURIComponent(`
@@ -19,7 +22,25 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="icon" href={`data:image/svg+xml;utf8,${faviconSvg}`} />
       </Head>
 
-      {/* Mount background once at the app level so it appears on every page */}
+      {/* Google Analytics - loads after interactive so it won't block render */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
+          `,
+        }}
+      />
+
+      {/* Mount the animated background once at the app level */}
       <AnimatedBackground />
 
       <div className="site-root">
