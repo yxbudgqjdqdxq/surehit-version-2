@@ -10,8 +10,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 
 // --- 1. CONFIGURATION ---
 // Exact model from V1
-const SELECTED_MODEL = "gemma-2-2b-it-q4f16_1-MLC"; 
-
+// Optimized for iGPU Laptops (Fast & "Good Enough")
+const SELECTED_MODEL = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
 // Production Override (Optional)
 const CUSTOM_MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL; 
 const CUSTOM_MODEL_ID = "ravens-custom-model";
