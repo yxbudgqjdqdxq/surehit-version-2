@@ -2,17 +2,17 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 /**
- * RAVEN'S PROTOCOL - PRODUCTION ENGINE (V12 - BARE METAL)
- * * PERFORMANCE: Removed all "penalty" calculations that slow down CPU inference.
- * * CORE: Exact import logic from OfflineHypeChat1.jsx (The fast version).
- * * FEATURE: Retains Env Var support for GitHub/Vercel deployment.
+ * RAVEN'S PROTOCOL - PRODUCTION ENGINE (V13 - FINAL)
+ * * MODEL: Llama-3.2-1B-Instruct (Optimized for Laptop iGPUs/CPUs).
+ * * SPEED: Stripped "penalty" logic for maximum inference speed (5-10s response).
+ * * LIMITS: Zero. Runs locally on the user's browser.
  */
 
 // --- 1. CONFIGURATION ---
-// Exact model from V1
-// Optimized for iGPU Laptops (Fast & "Good Enough")
-const SELECTED_MODEL = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
-// Production Override (Optional)
+// The "Laptop Saver" Model: Small, fast, capable enough for the Raven persona.
+const SELECTED_MODEL = "Llama-3.2-1B-Instruct-q4f16_1-MLC"; 
+
+// Optional: Supports custom hosting if you add NEXT_PUBLIC_MODEL_URL later
 const CUSTOM_MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL; 
 const CUSTOM_MODEL_ID = "ravens-custom-model";
 
@@ -106,14 +106,14 @@ export default function RavensProtocolPage() {
     statusRef.current = status;
   }, [status]);
 
-  // --- 2. SYSTEM INITIALIZATION (EXACTLY AS V1) ---
+  // --- 2. SYSTEM INITIALIZATION ---
   useEffect(() => {
     async function initSystem() {
       if (engineRef.current) return;
       
       // DIAGNOSTICS: Check for GPU Headers
       if (typeof window !== "undefined" && !window.crossOriginIsolated) {
-        setIsSlowMode(true); // Will show warning in UI
+        setIsSlowMode(true); // Will show warning in UI if headers missing
       }
 
       try {
@@ -125,7 +125,7 @@ export default function RavensProtocolPage() {
         const mod = await import("@mlc-ai/web-llm");
         const { CreateMLCEngine, prebuiltAppConfig } = mod;
         
-        // --- CONFIG: V1 Logic + Env Var Check ---
+        // --- CONFIG: Setup Model List ---
         let finalConfig = { ...prebuiltAppConfig, use_indexed_db_cache: true };
         let modelToLoad = SELECTED_MODEL;
 
@@ -146,10 +146,6 @@ export default function RavensProtocolPage() {
         });
 
         engineRef.current = eng;
-        
-        // Debug hook
-        if (process.env.NODE_ENV === 'development') window.__ravens_engine__ = eng;
-
         setStatus("READY");
       } catch (err) {
         console.error("Critical Failure:", err);
@@ -160,7 +156,7 @@ export default function RavensProtocolPage() {
     initSystem();
   }, []);
 
-  // --- 3. THE ETERNAL TYPING LOOP (EXACTLY AS V1) ---
+  // --- 3. THE ETERNAL TYPING LOOP ---
   useEffect(() => {
     let animationFrameId;
 
@@ -231,8 +227,8 @@ export default function RavensProtocolPage() {
     setMessages(prev => [...prev, { role: "assistant", content: "" }]);
 
     try {
-      // --- FAST GENERATION PARAMS (V1 STYLE) ---
-      // Removed presence_penalty and frequency_penalty to restore CPU speed
+      // --- FAST GENERATION PARAMS ---
+      // Removed penalties to keep CPU usage low
       const chunks = await engineRef.current.chat.completions.create({
         messages: context,
         temperature: 0.7, 
