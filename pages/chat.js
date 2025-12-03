@@ -16,7 +16,7 @@ export default function ChatPage() {
   // Controls the Ravens Protocol UI
   const [useOffline, setUseOffline] = useState(false);
 
-  // --- SEND SIGNAL TO _APP.JS TO STOP MUSIC ---
+  // --- TELL _APP.JS TO STOP MUSIC IF RAVENS IS ON ---
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: useOffline }));
     return () => {
