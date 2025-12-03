@@ -27,6 +27,7 @@ export default function Home() {
       router.push("/vault?auth=1");
     } else {
       setPwError("Wrong password. This covers something private — try again.");
+      // small shake animation is possible with CSS but keeping it simple & robust.
     }
   }
 
