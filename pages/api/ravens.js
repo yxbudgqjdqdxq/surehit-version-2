@@ -1,14 +1,14 @@
 import Groq from "groq-sdk";
 
-// Initialize the Brain
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || "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"
 });
 
-const SYSTEM_PROMPT = `You are "Raven's Protocol". Keep replies short, robotic, and high-status.`;
+const SYSTEM_PROMPT = `You are "Raven's Protocol": a compact, unemotional, status-preserving assistant.`;
 
 export default async function handler(req, res) {
-  // 1. Force headers immediately so the connection stays open
+  // 1. FORCE THE CONNECTION OPEN IMMEDIATELY
+  // This tricks the frontend into thinking everything is fine so it doesn't show "Severed"
   res.writeHead(200, {
     'Content-Type': 'text/plain; charset=utf-8',
     'Transfer-Encoding': 'chunked',
@@ -18,12 +18,21 @@ export default async function handler(req, res) {
 
   try {
     if (req.method !== "POST") {
-      throw new Error("Method not allowed. Use POST.");
+      res.write("[ERROR: Request must be POST]");
+      res.end();
+      return;
     }
 
-    const { messages } = req.body;
+    const { messages } = req.body || {};
+    
+    // Safety check for messages
+    if (!messages || !Array.isArray(messages)) {
+      res.write("[ERROR: No 'messages' array sent in body]");
+      res.end();
+      return;
+    }
 
-    // 2. Attempt the Groq Call
+    // 2. ATTEMPT GROQ CONNECTION
     const completion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
@@ -35,19 +44,22 @@ export default async function handler(req, res) {
       stream: true,
     });
 
-    // 3. Stream success
+    // 3. STREAM THE RESPONSE
     for await (const chunk of completion) {
       const content = chunk.choices[0]?.delta?.content || "";
-      if (content) res.write(content);
+      if (content) {
+        res.write(content);
+      }
     }
     
     res.end();
 
   } catch (error) {
-    // 4. CATCH ERRORS AND PRINT THEM TO THE CHAT
-    console.error("Backend Error:", error);
-    res.write(`\n[SYSTEM ERROR: ${error.message}]\n`);
-    res.write("Check your server terminal for details.");
+    // 4. PRINT THE REAL ERROR TO THE CHAT UI
+    console.error("BACKEND ERROR:", error); 
+    res.write(`\n\n[SYSTEM FAILURE: ${error.message}]\n`);
+    res.write(`[TYPE: ${error.type || "Unknown"}]\n`);
+    res.write(`[CODE: ${error.code || "Unknown"}]`);
     res.end();
   }
 }
