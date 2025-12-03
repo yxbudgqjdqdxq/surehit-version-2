@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from 'next/dynamic';
 
+// Dynamic import for the Ravens Protocol overlay
 const OfflineHypeChat = dynamic(() => import('../components/OfflineHypeChat'), { ssr: false });
 
 export default function ChatPage() {
@@ -15,10 +16,10 @@ export default function ChatPage() {
   const [lastSentText, setLastSentText] = useState("");
   const cardRef = useRef(null);
   
-  // Controls the switch to Ravens Protocol
+  // This toggles the Ravens Protocol UI
   const [useOffline, setUseOffline] = useState(false);
 
-  // mood detection
+  // --- MOOD DETECTION LOGIC ---
   function detectMoodLocal(text) {
     const t = (text || "").toLowerCase();
     if (/(sad|tired|down|cry|hurt|lonely|gloomy|blue|bummed|drained|weary)/.test(t)) return "sad";
@@ -33,7 +34,6 @@ export default function ChatPage() {
     return "neutral";
   }
 
-  // emoji-only detection
   function isEmojiOnly(str) {
     if (!str) return false;
     if (/[A-Za-z0-9]/.test(str)) return false;
@@ -41,7 +41,6 @@ export default function ChatPage() {
     return /\S/.test(str);
   }
 
-  // background gradients
   useEffect(() => {
     const gradients = {
       sad: "linear-gradient(135deg,#cfe0ff,#9fb7ff)",
@@ -86,7 +85,6 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
-    // initial fetch
     (async () => {
       const initial = await callApi("");
       if (initial) setReply(initial);
@@ -155,16 +153,17 @@ export default function ChatPage() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       
-      {/* RAVENS PROTOCOL OVERLAY */}
+      {/* 1. RAVENS OVERLAY TRIGGER */}
       {useOffline ? <OfflineHypeChat personaName={'Ayesha'} /> : null}
 
       <div style={{ width: "100%", maxWidth: 920 }}>
+        
+        {/* HEADER */}
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
             <h1 style={{ margin: 0 }}>Daily Affirmations</h1>
             <div style={{ color: "rgba(0,0,0,0.6)", fontSize: 13 }}>For my baby — love, comfort, and endless hype.</div>
           </div>
-
           <div>
             <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.18)", color: "#000" }}>
               Another one
@@ -172,6 +171,7 @@ export default function ChatPage() {
           </div>
         </header>
 
+        {/* MAIN CARD */}
         <main ref={cardRef} style={{ background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: 30, minHeight: 240, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}>
           {loading ? (
             <div style={{ textAlign: "center", color: "#333" }}>Hypeman is thinking…</div>
@@ -180,12 +180,12 @@ export default function ChatPage() {
               {reply || "Type how you feel — I’ll say the rest."}
             </div>
           )}
-
           <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
             Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong>
           </div>
         </main>
 
+        {/* INPUT FORM */}
         <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 16 }}>
           <input
             value={input}
@@ -202,8 +202,8 @@ export default function ChatPage() {
 
         {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
 
-        {/* --- REPLACED CHECKBOX WITH CUSTOM BUTTON --- */}
-        <div style={{ textAlign: "center", marginTop: 24 }}>
+        {/* --- 2. THE NEW BUTTON (REPLACES CHECKBOX) --- */}
+        <div style={{ textAlign: "center", marginTop: 30 }}>
            <button
              onClick={() => setUseOffline(true)}
              style={{
@@ -212,17 +212,19 @@ export default function ChatPage() {
                cursor: "pointer",
                display: "inline-flex",
                alignItems: "center",
-               gap: "8px",
-               padding: "8px 12px",
-               opacity: 0.6,
+               justifyContent: "center",
+               gap: "10px",
+               padding: "8px 16px",
+               opacity: 0.7,
                transition: "opacity 0.2s"
              }}
              onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-             onMouseOut={(e) => e.currentTarget.style.opacity = '0.6'}
+             onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
            >
-             {/* Uses the image you saved in public/ravens-star.png */}
-             <img src="/ravens-star.png" alt="Ravens" style={{ width: 20, height: 20, objectFit: "contain" }} />
-             <span style={{ fontSize: 14, fontWeight: 500, color: "#333", fontFamily: "sans-serif" }}>
+             {/* This image must be in the public folder */}
+             <img src="/ravens-star.png" alt="Ravens" style={{ width: 24, height: 24, objectFit: "contain" }} />
+             
+             <span style={{ fontSize: 14, fontWeight: 600, color: "#444", fontFamily: "sans-serif", letterSpacing: "0.5px" }}>
                Switch to Ravens Protocol
              </span>
            </button>
