@@ -202,7 +202,7 @@ export default function ChatPage() {
 
         {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
 
-        {/* --- 2. THE CORRECTED RAVENS BUTTON --- */}
+        {/* --- 2. THE CORRECTED PROPORTIONAL BUTTON --- */}
         <div style={{ textAlign: "center", marginTop: 40 }}>
            <button
              onClick={() => setUseOffline(true)}
@@ -213,8 +213,8 @@ export default function ChatPage() {
                display: "inline-flex",
                alignItems: "center",
                justifyContent: "center",
-               // Guidelines: Spacing set to 12px for visual separation
-               gap: "12px", 
+               // Spacing: 10px (Standard for icon + label)
+               gap: "10px", 
                padding: "10px 20px",
                opacity: 0.85, 
                transition: "transform 0.2s, opacity 0.2s"
@@ -228,29 +228,25 @@ export default function ChatPage() {
                 e.currentTarget.style.transform = 'scale(1)';
              }}
            >
-             {/* Guidelines: Standard size 36px. 
-                Matches visual weight of 18px text.
-                Vertical alignment centered.
-             */}
+             {/* ICON: 32px (Dominant visual element) */}
              <img 
                 src="/ravens-star.png" 
                 alt="Ravens" 
                 style={{ 
-                    width: "36px", 
-                    height: "36px", 
+                    width: "32px", 
+                    height: "32px", 
                     objectFit: "contain",
-                    display: "block" // Removes inline spacing issues
+                    display: "block"
                 }} 
              />
              
-             {/* Guidelines: Text centered relative to icon block */}
+             {/* TEXT: 15px (Subservient label, Medium weight) */}
              <span style={{ 
-                fontSize: "18px", 
-                fontWeight: 600, 
-                color: "#555", 
+                fontSize: "15px", 
+                fontWeight: 500, // Reduced from 600 to look cleaner/smaller
+                color: "#444", 
                 fontFamily: "Inter, sans-serif", 
-                letterSpacing: "0.4px",
-                lineHeight: "1" // Ensures text centers with icon
+                letterSpacing: "0.3px"
              }}>
                Switch to Ravens Protocol
              </span>
