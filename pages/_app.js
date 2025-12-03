@@ -1,6 +1,8 @@
 // pages/_app.js
 import { useState, useEffect, useRef } from 'react';
-import '../styles/globals.css'; 
+import Head from "next/head";
+import Script from "next/script";
+import "../styles/globals.css";
 
 // --- 🎵 GLOBAL PLAYLIST ---
 const PLAYLIST = [
@@ -10,51 +12,41 @@ const PLAYLIST = [
   "/song4.mp3"
 ];
 
-export default function App({ Component, pageProps }) {
-  // Music State
+const GA_MEASUREMENT_ID = "G-VFD4DC3SSE";
+
+export default function MyApp({ Component, pageProps }) {
+  // --- MUSIC STATE ---
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
-  
-  // App State
   const [isRavensActive, setIsRavensActive] = useState(false);
-  const [hearts, setHearts] = useState([]);
-  
   const audioRef = useRef(null);
 
-  // --- 1. GENERATE FLOATING HEARTS (Global Animation) ---
-  useEffect(() => {
-    const newHearts = Array.from({ length: 30 }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100 + "%",
-      animationDuration: Math.random() * 5 + 5 + "s", 
-      animationDelay: Math.random() * 5 + "s",
-      scale: Math.random() * 0.5 + 0.8 
-    }));
-    setHearts(newHearts);
-  }, []);
+  const faviconSvg = encodeURIComponent(`
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+      <path fill='white' d='M12 21s-7.33-4.94-9.2-8.02C.8 9.9 3.2 6.5 6.2 6.5c1.7 0 2.68 1.1 3.3 2.05.33.52.62 1.02 1.5 1.02.88 0 1.17-.5 1.5-1.02.62-.95 1.6-2.05 3.3-2.05 3 0 5.4 3.4 3.4 6.48C19.33 16.06 12 21 12 21z'/>
+    </svg>
+  `);
 
-  // --- 2. LISTEN FOR RAVENS PROTOCOL SIGNALS ---
+  // --- 1. LISTEN FOR RAVENS PROTOCOL SIGNALS ---
   useEffect(() => {
     const handleRavens = (e) => {
       const active = e.detail;
       setIsRavensActive(active);
-
       if (active && audioRef.current) {
         audioRef.current.pause();
         setIsPlaying(false);
       } else if (!active && audioRef.current && !isPlaying) {
-         // Optional: Resume music when leaving Ravens
-         // audioRef.current.play().catch(() => {});
-         // setIsPlaying(true);
+         // Optional: Resume on close
+         audioRef.current.play().catch(() => {});
+         setIsPlaying(true);
       }
     };
-
     window.addEventListener('ravens-toggle', handleRavens);
     return () => window.removeEventListener('ravens-toggle', handleRavens);
   }, [isPlaying]);
 
-  // --- 3. AUTO-START MUSIC ---
+  // --- 2. GLOBAL AUTO-START MUSIC ---
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -62,7 +54,7 @@ export default function App({ Component, pageProps }) {
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => setIsPlaying(true)).catch(() => {
-          // Handle browser autoplay policy
+          // Browser blocked auto-play? Wait for interaction
           const enableAudio = () => {
              if (!isRavensActive) {
                 audio.play();
@@ -76,7 +68,7 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
-  // Music Controls
+  // --- CONTROLS ---
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
@@ -107,49 +99,37 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      {/* GLOBAL AUDIO (Invisible) */}
-      <audio ref={audioRef} src={PLAYLIST[currentSongIndex]} onEnded={nextSong} />
-      
-      {/* GLOBAL BACKGROUND: HEARTS (Hidden if Ravens is Active) */}
-      {!isRavensActive && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-           {/* Inline styles for the heart animation to guarantee it works */}
-           <style jsx global>{`
-             @keyframes floatUp {
-               0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-               20% { opacity: 1; }
-               100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-             }
-             .heart {
-               position: absolute;
-               bottom: -10%;
-               font-size: 24px;
-               color: #ff5a9e;
-               opacity: 0.6;
-               animation-name: floatUp;
-               animation-timing-function: linear;
-               animation-iteration-count: infinite;
-             }
-           `}</style>
-           {hearts.map((h) => (
-             <div key={h.id} className="heart" style={{
-                 left: h.left,
-                 animationDuration: h.animationDuration,
-                 animationDelay: h.animationDelay,
-                 transform: `scale(${h.scale})`
-               }}>
-               ❤️
-             </div>
-           ))}
-        </div>
-      )}
+      <Head>
+        <title>🤍 ilovemybubu.vercel.app</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href={`data:image/svg+xml;utf8,${faviconSvg}`} />
+      </Head>
 
-      {/* THE PAGE CONTENT */}
-      <div style={{ position: 'relative', zIndex: 10 }}>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
+          `,
+        }}
+      />
+
+      {/* GLOBAL AUDIO ELEMENT */}
+      <audio ref={audioRef} src={PLAYLIST[currentSongIndex]} onEnded={nextSong} />
+
+      <div className="site-root">
         <Component {...pageProps} />
       </div>
 
-      {/* GLOBAL VIBE PLAYER UI (Hidden if Ravens is Active) */}
+      {/* GLOBAL VIBE PLAYER (Hidden if Ravens is Active) */}
       {!isRavensActive && (
         <div style={{
             position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
