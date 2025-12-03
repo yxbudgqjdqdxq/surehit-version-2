@@ -5,7 +5,7 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || "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"
 });
 
-// *** UPDATED MODEL NAME BELOW ***
+// *** UPDATED TO THE NEW WORKING MODEL ***
 const MODEL_NAME = "llama-3.1-8b-instant"; 
 
 const SYSTEM_PROMPT = `You are "Raven's Protocol": a compact, unemotional, status-preserving assistant that represents Asif. Your job is to present facts, protect boundaries, and increase perceived value. Keep every reply short, precise, and adaptive.
@@ -77,20 +77,17 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    // Call Groq AI with streaming enabled
     const completion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages
       ],
-      // We switched the model here to the working one
-      model: MODEL_NAME,
+      model: MODEL_NAME, // Using the new fixed model
       temperature: 0.6,
       max_tokens: 300,
       stream: true,
     });
 
-    // Set headers for streaming response
     res.writeHead(200, {
       'Content-Type': 'text/plain; charset=utf-8',
       'Transfer-Encoding': 'chunked',
@@ -98,7 +95,6 @@ export default async function handler(req, res) {
       'Connection': 'keep-alive',
     });
 
-    // Stream the chunks to the frontend
     for await (const chunk of completion) {
       const content = chunk.choices[0]?.delta?.content || "";
       if (content) {
@@ -110,12 +106,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error("CRITICAL API ERROR:", error);
-    // If headers haven't been sent, we can send a JSON error
     if (!res.headersSent) {
         res.status(500).json({ error: error.message || "Internal Server Error" });
     } else {
-        // If streaming already started, write the error to the stream so user sees it
-        res.write(`\n[SYSTEM ERROR: ${error.message}]`);
         res.end();
     }
   }
