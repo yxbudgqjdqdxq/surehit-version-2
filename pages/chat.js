@@ -202,8 +202,8 @@ export default function ChatPage() {
 
         {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
 
-        {/* --- 2. THE NEW BUTTON (REPLACES CHECKBOX) --- */}
-        <div style={{ textAlign: "center", marginTop: 30 }}>
+        {/* --- 2. UPDATED BUTTON (Larger Star & Better Proportions) --- */}
+        <div style={{ textAlign: "center", marginTop: 40 }}>
            <button
              onClick={() => setUseOffline(true)}
              style={{
@@ -213,24 +213,39 @@ export default function ChatPage() {
                display: "inline-flex",
                alignItems: "center",
                justifyContent: "center",
-               gap: "10px",
-               padding: "8px 16px",
-               opacity: 0.7,
-               transition: "opacity 0.2s"
+               gap: "14px", 
+               padding: "10px 20px",
+               opacity: 0.9, 
+               transition: "transform 0.2s, opacity 0.2s"
              }}
-             onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-             onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
+             onMouseOver={(e) => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'scale(1.02)';
+             }}
+             onMouseOut={(e) => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'scale(1)';
+             }}
            >
-             {/* This image must be in the public folder */}
-             <img src="/ravens-star.png" alt="Ravens" style={{ width: 24, height: 24, objectFit: "contain" }} />
+             {/* INCREASED SIZE TO 45px + ADDED SHADOW */}
+             <img 
+                src="/ravens-star.png" 
+                alt="Ravens" 
+                style={{ 
+                    width: 45, 
+                    height: 45, 
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 0 8px rgba(0, 150, 255, 0.4))"
+                }} 
+             />
              
-             <span style={{ fontSize: 14, fontWeight: 600, color: "#444", fontFamily: "sans-serif", letterSpacing: "0.5px" }}>
+             <span style={{ fontSize: 16, fontWeight: 600, color: "#333", fontFamily: "sans-serif", letterSpacing: "0.5px" }}>
                Switch to Ravens Protocol
              </span>
            </button>
         </div>
 
-        <footer style={{ marginTop: 16, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
+        <footer style={{ marginTop: 24, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
           Tip: A short sentence works best — the hypeman will pick the right mood.
         </footer>
       </div>
