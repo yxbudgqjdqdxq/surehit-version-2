@@ -11,14 +11,14 @@ export default function Home() {
   const [hearts, setHearts] = useState([]);
   const router = useRouter();
 
-  // --- RESTORED: FLOATING HEARTS ANIMATION ---
+  // --- RESTORED: GENERATE HEARTS ---
   useEffect(() => {
-    const newHearts = Array.from({ length: 30 }).map((_, i) => ({
+    const newHearts = Array.from({ length: 35 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100 + "%",
-      animationDuration: Math.random() * 5 + 5 + "s", 
+      animationDuration: Math.random() * 5 + 6 + "s", 
       animationDelay: Math.random() * 5 + "s",
-      scale: Math.random() * 0.5 + 0.8 
+      scale: Math.random() * 0.6 + 0.8 
     }));
     setHearts(newHearts);
   }, []);
@@ -44,44 +44,14 @@ export default function Home() {
   }
 
   return (
+    // Added specific pink gradient back to main container
     <main className="main-container" style={{ position: "relative", overflow: "hidden", minHeight: "100vh", background: "linear-gradient(135deg, #ffe6fa 0%, #ffd1e8 100%)" }}>
       
-      {/* --- INJECTED STYLES FOR HEARTS --- */}
-      <style jsx>{`
-        @keyframes floatUp {
-          0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-          20% { opacity: 1; }
-          100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-        .heart {
-          position: absolute;
-          bottom: -10%;
-          font-size: 24px;
-          color: #ff5a9e;
-          opacity: 0.6;
-          user-select: none;
-          pointer-events: none;
-          animation-name: floatUp;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-          z-index: 0;
-        }
-        .content-layer {
-          position: relative;
-          z-index: 10;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 100vh;
-        }
-      `}</style>
-
-      {/* --- RENDER HEARTS --- */}
+      {/* --- RENDER HEARTS (Using Global CSS) --- */}
       {hearts.map((h) => (
         <div
           key={h.id}
-          className="heart"
+          className="floating-heart"
           style={{
             left: h.left,
             animationDuration: h.animationDuration,
@@ -93,8 +63,8 @@ export default function Home() {
         </div>
       ))}
 
-      {/* --- MAIN CONTENT --- */}
-      <div className="content-layer">
+      {/* --- CONTENT LAYER (Higher Z-Index) --- */}
+      <div style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {!entered ? (
           <button className="landing-btn" onClick={handleMainClick}>
             I Missed You Bubu
@@ -129,9 +99,7 @@ export default function Home() {
         )}
 
         {showModal && (
-          <div style={{
-            position: "fixed", inset: 0, background: "rgba(0,0,0,0.34)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 60
-          }}>
+          <div className="modal">
             <div style={{ width: "min(680px, 92%)", background: "#fff", padding: 22, borderRadius: 12, boxShadow: "0 20px 60px rgba(0,0,0,0.18)" }}>
               <h3 style={{ margin: 0 }}>Secret Vault</h3>
               <p style={{ color: "rgba(0,0,0,0.6)" }}>Enter the password to reveal a private message.</p>
