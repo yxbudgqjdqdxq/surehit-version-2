@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
   const [isRavensActive, setIsRavensActive] = useState(false);
   const audioRef = useRef(null);
 
-  // --- LISTEN FOR RAVENS PROTOCOL ---
+  // --- LISTEN FOR RAVENS PROTOCOL SIGNAL ---
   useEffect(() => {
     const handleRavens = (e) => {
       const active = e.detail;
@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }) {
         audioRef.current.pause();
         setIsPlaying(false);
       } else if (!active && audioRef.current && !isPlaying) {
-         // Automatically resume when Ravens is closed
+         // Auto-resume when closed
          audioRef.current.play().catch(() => {});
          setIsPlaying(true);
       }
@@ -37,7 +37,7 @@ export default function App({ Component, pageProps }) {
     return () => window.removeEventListener('ravens-toggle', handleRavens);
   }, [isPlaying]);
 
-  // --- AUTO-START MUSIC ---
+  // --- GLOBAL AUTO-START ---
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
