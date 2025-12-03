@@ -1,4 +1,4 @@
-// pages/paragraphs.js
+
 import Link from 'next/link'
 import paragraphs from '../public/data/paragraphs.json'
 
