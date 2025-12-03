@@ -1,6 +1,6 @@
 // pages/_app.js
 import { useState, useEffect, useRef } from 'react';
-import '../styles/globals.css'; // Keep your global styles
+import '../styles/globals.css'; 
 
 // --- 🎵 GLOBAL PLAYLIST ---
 const PLAYLIST = [
@@ -11,37 +11,33 @@ const PLAYLIST = [
 ];
 
 export default function App({ Component, pageProps }) {
-  // --- MUSIC PLAYER STATE ---
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [isRavensActive, setIsRavensActive] = useState(false);
   const audioRef = useRef(null);
 
-  // --- 1. HANDLE RAVENS SILENCE ---
-  // This listens for a signal from chat.js to kill the vibe if Ravens is active
+  // --- LISTEN FOR RAVENS PROTOCOL ---
   useEffect(() => {
-    const handleRavensToggle = (e) => {
+    const handleRavens = (e) => {
       const active = e.detail;
       setIsRavensActive(active);
-      
+
       if (active && audioRef.current) {
         audioRef.current.pause();
         setIsPlaying(false);
       } else if (!active && audioRef.current && !isPlaying) {
-        // Optional: Resume automatically when leaving Ravens? 
-        // Let's leave it paused or resume based on preference. 
-        // Below resumes it:
-        audioRef.current.play().catch(() => {});
-        setIsPlaying(true);
+         // Automatically resume when Ravens is closed
+         audioRef.current.play().catch(() => {});
+         setIsPlaying(true);
       }
     };
 
-    window.addEventListener('ravens-toggle', handleRavensToggle);
-    return () => window.removeEventListener('ravens-toggle', handleRavensToggle);
+    window.addEventListener('ravens-toggle', handleRavens);
+    return () => window.removeEventListener('ravens-toggle', handleRavens);
   }, [isPlaying]);
 
-  // --- 2. AUTO-START MUSIC (Global) ---
+  // --- AUTO-START MUSIC ---
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -49,19 +45,18 @@ export default function App({ Component, pageProps }) {
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => setIsPlaying(true)).catch(() => {
-          // Browser blocked auto-play? Wait for first click anywhere.
           const enableAudio = () => {
-            if (!isRavensActive) {
+             if (!isRavensActive) {
                 audio.play();
                 setIsPlaying(true);
-            }
-            window.removeEventListener('click', enableAudio);
+             }
+             window.removeEventListener('click', enableAudio);
           };
           window.addEventListener('click', enableAudio);
         });
       }
     }
-  }, []); // Runs once on site load
+  }, []);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -93,13 +88,10 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      {/* GLOBAL AUDIO ELEMENT */}
       <audio ref={audioRef} src={PLAYLIST[currentSongIndex]} onEnded={nextSong} />
-
-      {/* RENDER THE CURRENT PAGE */}
+      
       <Component {...pageProps} />
 
-      {/* GLOBAL VIBE PLAYER (Hidden if Ravens is Active) */}
       {!isRavensActive && (
         <div style={{
             position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
