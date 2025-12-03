@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from 'next/dynamic';
 
-// Dynamic import for the Ravens Protocol overlay
 const OfflineHypeChat = dynamic(() => import('../components/OfflineHypeChat'), { ssr: false });
 
 export default function ChatPage() {
@@ -11,27 +10,20 @@ export default function ChatPage() {
   const [mood, setMood] = useState("neutral");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [lastMessage, setLastMessage] = useState("");
-  const [emptyClickCount, setEmptyClickCount] = useState(0);
   const [lastSentText, setLastSentText] = useState("");
   const cardRef = useRef(null);
   
   // Controls the Ravens Protocol UI
   const [useOffline, setUseOffline] = useState(false);
 
-  // --- SIGNAL TO GLOBAL PLAYER ---
-  // When useOffline changes, tell _app.js to pause/resume music
+  // --- SEND SIGNAL TO _APP.JS TO STOP/START MUSIC ---
   useEffect(() => {
-    // Dispatch event: true = stop music, false = play music
     window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: useOffline }));
-    
-    // Cleanup: If we leave the page, ensure music comes back
     return () => {
         window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: false }));
     };
   }, [useOffline]);
 
-  // --- MOOD DETECTION ---
   function detectMoodLocal(text) {
     const t = (text || "").toLowerCase();
     if (/(sad|tired|down|cry|hurt|lonely|gloomy|blue|bummed|drained|weary)/.test(t)) return "sad";
@@ -80,15 +72,10 @@ export default function ChatPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: message || "" })
       });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Server error: ${txt}`);
-      }
+      if (!res.ok) throw new Error("Server error");
       const data = await res.json();
       return data.reply ?? "";
     } catch (err) {
-      console.error("API error:", err);
       setError(String(err));
       return null;
     } finally {
@@ -107,54 +94,23 @@ export default function ChatPage() {
     e && e.preventDefault();
     setError(null);
     const text = input.trim();
-
-    if (!text) {
-      const next = emptyClickCount + 1;
-      setEmptyClickCount(next);
-      if (next >= 2) {
-        setReply("say something my love");
-        setEmptyClickCount(0);
-      } else {
-        setReply("Tap once more and say something, babe.");
-      }
-      return;
-    }
-
-    if (isEmojiOnly(text)) {
-      setReply("Sorry?");
-      setInput("");
-      return;
-    }
-
-    if (text === lastSentText) {
-      setReply("say something my love");
-      setInput("");
-      return;
-    }
+    if (!text) { setReply("say something my love"); return; }
+    if (isEmojiOnly(text)) { setReply("Sorry?"); setInput(""); return; }
+    if (text === lastSentText) { setReply("say something my love"); setInput(""); return; }
 
     setLastSentText(text);
-    setLastMessage(text);
     setInput("");
     setMood(detectMoodLocal(text));
     setLoading(true);
-
     const r = await callApi(text);
-    if (r !== null) {
-      setReply(r);
-    } else {
-      setReply("Sorry — couldn't fetch a reply.");
-    }
-
+    if (r !== null) setReply(r);
     if (cardRef.current) {
-      cardRef.current.animate(
-        [{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }],
-        { duration: 420, easing: "cubic-bezier(.2,.9,.2,1)" }
-      );
+      cardRef.current.animate([{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }], { duration: 420 });
     }
   };
 
   const handleAnother = async () => {
-    const target = lastMessage || "";
+    const target = lastSentText || "";
     setMood(detectMoodLocal(target));
     setLoading(true);
     const r = await callApi(target);
@@ -164,106 +120,36 @@ export default function ChatPage() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      
-      {/* 1. RAVENS OVERLAY */}
       {useOffline ? <OfflineHypeChat personaName={'Ayesha'} /> : null}
 
       <div style={{ width: "100%", maxWidth: 920 }}>
-        
-        {/* HEADER */}
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
             <h1 style={{ margin: 0 }}>Daily Affirmations</h1>
             <div style={{ color: "rgba(0,0,0,0.6)", fontSize: 13 }}>For my baby — love, comfort, and endless hype.</div>
           </div>
-          <div>
-            <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.18)", color: "#000" }}>
-              Another one
-            </button>
-          </div>
+          <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.18)", color: "#000" }}>Another one</button>
         </header>
 
-        {/* MAIN CARD */}
         <main ref={cardRef} style={{ background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: 30, minHeight: 240, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}>
-          {loading ? (
-            <div style={{ textAlign: "center", color: "#333" }}>Hypeman is thinking…</div>
-          ) : (
-            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", whiteSpace: "pre-wrap" }}>
-              {reply || "Type how you feel — I’ll say the rest."}
-            </div>
-          )}
-          <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
-            Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong>
-          </div>
+          {loading ? <div style={{ textAlign: "center", color: "#333" }}>Hypeman is thinking…</div> : 
+            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", whiteSpace: "pre-wrap" }}>{reply || "Type how you feel — I’ll say the rest."}</div>
+          }
+          <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong></div>
         </main>
 
-        {/* INPUT FORM */}
         <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 16 }}>
-          <input
-            value={input}
-            onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }}
-            placeholder="Type how you're feeling (e.g. 'i feel tired', 'i'm happy')"
-            style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }}
-            disabled={loading}
-            aria-label="Your message"
-          />
-          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>
-            {loading ? "Sending…" : "Send"}
-          </button>
+          <input value={input} onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} placeholder="Type how you're feeling..." style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }} disabled={loading} />
+          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>{loading ? "Sending…" : "Send"}</button>
         </form>
 
-        {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
-
-        {/* --- 4. THE CLEAN RAVENS BUTTON (Replaces Checkbox) --- */}
         <div style={{ textAlign: "center", marginTop: 40 }}>
-           <button
-             onClick={() => setUseOffline(true)}
-             style={{
-               background: "transparent",
-               border: "none",
-               cursor: "pointer",
-               display: "inline-flex",
-               alignItems: "center",
-               justifyContent: "center",
-               gap: "10px", 
-               padding: "10px 20px",
-               opacity: 0.85, 
-               transition: "transform 0.2s, opacity 0.2s"
-             }}
-             onMouseOver={(e) => {
-                e.currentTarget.style.opacity = '1';
-                e.currentTarget.style.transform = 'scale(1.02)';
-             }}
-             onMouseOut={(e) => {
-                e.currentTarget.style.opacity = '0.85';
-                e.currentTarget.style.transform = 'scale(1)';
-             }}
-           >
-             <img 
-                src="/ravens-star.png" 
-                alt="Ravens" 
-                style={{ 
-                    width: "32px", 
-                    height: "32px", 
-                    objectFit: "contain",
-                    display: "block"
-                }} 
-             />
-             <span style={{ 
-                fontSize: "15px", 
-                fontWeight: 500,
-                color: "#444", 
-                fontFamily: "Inter, sans-serif", 
-                letterSpacing: "0.3px"
-             }}>
-               Switch to Ravens Protocol
-             </span>
+           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85 }}>
+             <img src="/ravens-star.png" alt="Ravens" style={{ width: "32px", height: "32px", objectFit: "contain", display: "block" }} />
+             <span style={{ fontSize: "15px", fontWeight: 500, color: "#444", fontFamily: "Inter, sans-serif" }}>Switch to Ravens Protocol</span>
            </button>
         </div>
-
-        <footer style={{ marginTop: 24, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
-          Tip: A short sentence works best — the hypeman will pick the right mood.
-        </footer>
+        <footer style={{ marginTop: 24, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Tip: A short sentence works best.</footer>
       </div>
     </div>
   );
