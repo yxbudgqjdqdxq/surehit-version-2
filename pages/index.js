@@ -1,5 +1,5 @@
 // pages/index.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -8,7 +8,21 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [pw, setPw] = useState("");
   const [pwError, setPwError] = useState("");
+  const [hearts, setHearts] = useState([]);
   const router = useRouter();
+
+  // --- 1. RESTORED: THE ORIGINAL HEART ANIMATION LOGIC ---
+  useEffect(() => {
+    // This creates 30 hearts with random float speeds and positions
+    const newHearts = Array.from({ length: 30 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100 + "%",
+      animationDuration: Math.random() * 5 + 5 + "s", 
+      animationDelay: Math.random() * 5 + "s",
+      scale: Math.random() * 0.5 + 0.8 
+    }));
+    setHearts(newHearts);
+  }, []);
 
   function handleMainClick() {
     setEntered(true);
@@ -31,10 +45,58 @@ export default function Home() {
   }
 
   return (
-    // Note: The hearts are now provided by _app.js, so we just need the gradient here if desired, 
-    // or let the global CSS handle the background.
-    <main className="main-container" style={{ position: "relative", minHeight: "100vh", background: "linear-gradient(135deg, #ffe6fa 0%, #ffd1e8 100%)" }}>
+    <main className="main-container" style={{ position: "relative", overflow: "hidden", minHeight: "100vh", background: "linear-gradient(135deg, #ffe6fa 0%, #ffd1e8 100%)" }}>
       
+      {/* --- 2. RESTORED: THE CSS FOR THE HEARTS --- */}
+      <style jsx>{`
+        @keyframes floatUp {
+          0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+          20% { opacity: 1; }
+          100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+        .heart {
+          position: absolute;
+          bottom: -10%;
+          font-size: 24px;
+          color: #ff5a9e;
+          opacity: 0.6;
+          user-select: none;
+          pointer-events: none;
+          animation-name: floatUp;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          z-index: 0; 
+        }
+        /* Ensures buttons sit on top of hearts */
+        .content-layer {
+          position: relative;
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          width: 100%;
+        }
+      `}</style>
+
+      {/* --- 3. RESTORED: RENDERING THE HEARTS --- */}
+      {hearts.map((h) => (
+        <div
+          key={h.id}
+          className="heart"
+          style={{
+            left: h.left,
+            animationDuration: h.animationDuration,
+            animationDelay: h.animationDelay,
+            transform: `scale(${h.scale})`
+          }}
+        >
+          ❤️
+        </div>
+      ))}
+
+      {/* --- CONTENT LAYER --- */}
       <div className="content-layer">
         {!entered ? (
           <button className="landing-btn" onClick={handleMainClick}>
