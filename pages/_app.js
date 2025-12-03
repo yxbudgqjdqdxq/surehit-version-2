@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from "next/head";
 import Script from "next/script";
+import AnimatedBackground from "../components/AnimatedBackground";
+import Header from "../components/Header";
 import "../styles/globals.css";
 
 // --- 🎵 GLOBAL PLAYLIST ---
@@ -124,6 +126,12 @@ export default function MyApp({ Component, pageProps }) {
 
       {/* GLOBAL AUDIO ELEMENT */}
       <audio ref={audioRef} src={PLAYLIST[currentSongIndex]} onEnded={nextSong} />
+
+      {/* Mount the animated background once at the app level */}
+      <AnimatedBackground />
+
+      {/* Add the Header component here */}
+      <Header />
 
       <div className="site-root">
         <Component {...pageProps} />
