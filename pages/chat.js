@@ -1,9 +1,7 @@
-
 // pages/chat.js
 import React, { useState, useEffect, useRef } from "react";
-
-
 import dynamic from 'next/dynamic';
+
 const OfflineHypeChat = dynamic(() => import('../components/OfflineHypeChat'), { ssr: false });
 
 export default function ChatPage() {
@@ -16,6 +14,8 @@ export default function ChatPage() {
   const [emptyClickCount, setEmptyClickCount] = useState(0);
   const [lastSentText, setLastSentText] = useState("");
   const cardRef = useRef(null);
+  
+  // Controls the switch to Ravens Protocol
   const [useOffline, setUseOffline] = useState(false);
 
   // mood detection
@@ -33,18 +33,15 @@ export default function ChatPage() {
     return "neutral";
   }
 
-  // emoji-only detection (basic): if no alphanumeric characters, treat as emoji-only
+  // emoji-only detection
   function isEmojiOnly(str) {
     if (!str) return false;
-    // if contains any letter/number, it's not emoji-only
     if (/[A-Za-z0-9]/.test(str)) return false;
-    // treat other-letters as alpha too (unicode letters)
     if (/\p{Letter}/u.test(str)) return false;
-    // if contains non-space characters but no letters/numbers treat as emoji/symbols
     return /\S/.test(str);
   }
 
-  // ensure full-screen gradient for PC: apply to body
+  // background gradients
   useEffect(() => {
     const gradients = {
       sad: "linear-gradient(135deg,#cfe0ff,#9fb7ff)",
@@ -61,9 +58,6 @@ export default function ChatPage() {
     const g = gradients[mood] || gradients.neutral;
     document.body.style.background = g;
     document.body.style.transition = "background 600ms ease";
-    return () => {
-      // leave background as-is; this is fine for your app's single-page usage
-    };
   }, [mood]);
 
   async function callApi(message) {
@@ -97,7 +91,6 @@ export default function ChatPage() {
       const initial = await callApi("");
       if (initial) setReply(initial);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSend = async (e) => {
@@ -105,7 +98,6 @@ export default function ChatPage() {
     setError(null);
     const text = input.trim();
 
-    // EMPTY behavior: count clicks
     if (!text) {
       const next = emptyClickCount + 1;
       setEmptyClickCount(next);
@@ -118,14 +110,12 @@ export default function ChatPage() {
       return;
     }
 
-    // EMOJI ONLY behavior
     if (isEmojiOnly(text)) {
       setReply("Sorry?");
       setInput("");
       return;
     }
 
-    // prevent identical repeat spam
     if (text === lastSentText) {
       setReply("say something my love");
       setInput("");
@@ -164,6 +154,8 @@ export default function ChatPage() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      
+      {/* RAVENS PROTOCOL OVERLAY */}
       {useOffline ? <OfflineHypeChat personaName={'Ayesha'} /> : null}
 
       <div style={{ width: "100%", maxWidth: 920 }}>
@@ -210,9 +202,32 @@ export default function ChatPage() {
 
         {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
 
-        <div style={{textAlign:'center', marginTop:12}}>
-          <label style={{display:'inline-flex',alignItems:'center',gap:8}}><input type='checkbox' checked={useOffline} onChange={(e)=>setUseOffline(e.target.checked)} /> Use offline Gemma (may download model)</label>
+        {/* --- REPLACED CHECKBOX WITH CUSTOM BUTTON --- */}
+        <div style={{ textAlign: "center", marginTop: 24 }}>
+           <button
+             onClick={() => setUseOffline(true)}
+             style={{
+               background: "transparent",
+               border: "none",
+               cursor: "pointer",
+               display: "inline-flex",
+               alignItems: "center",
+               gap: "8px",
+               padding: "8px 12px",
+               opacity: 0.6,
+               transition: "opacity 0.2s"
+             }}
+             onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+             onMouseOut={(e) => e.currentTarget.style.opacity = '0.6'}
+           >
+             {/* Uses the image you saved in public/ravens-star.png */}
+             <img src="/ravens-star.png" alt="Ravens" style={{ width: 20, height: 20, objectFit: "contain" }} />
+             <span style={{ fontSize: 14, fontWeight: 500, color: "#333", fontFamily: "sans-serif" }}>
+               Switch to Ravens Protocol
+             </span>
+           </button>
         </div>
+
         <footer style={{ marginTop: 16, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>
           Tip: A short sentence works best — the hypeman will pick the right mood.
         </footer>
