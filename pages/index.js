@@ -11,15 +11,14 @@ export default function Home() {
   const [hearts, setHearts] = useState([]);
   const router = useRouter();
 
-  // --- RESTORE THE FLOATING HEARTS ANIMATION ---
+  // --- RESTORED: FLOATING HEARTS ANIMATION ---
   useEffect(() => {
-    // Generate 30 hearts with random positions and speeds
     const newHearts = Array.from({ length: 30 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100 + "%",
-      animationDuration: Math.random() * 5 + 5 + "s", // 5-10s float speed
+      animationDuration: Math.random() * 5 + 5 + "s", 
       animationDelay: Math.random() * 5 + "s",
-      scale: Math.random() * 0.5 + 0.8 // Random size
+      scale: Math.random() * 0.5 + 0.8 
     }));
     setHearts(newHearts);
   }, []);
@@ -47,7 +46,7 @@ export default function Home() {
   return (
     <main className="main-container" style={{ position: "relative", overflow: "hidden", minHeight: "100vh", background: "linear-gradient(135deg, #ffe6fa 0%, #ffd1e8 100%)" }}>
       
-      {/* --- INJECTED STYLES FOR HEARTS (Guarantees animation works) --- */}
+      {/* --- INJECTED STYLES FOR HEARTS --- */}
       <style jsx>{`
         @keyframes floatUp {
           0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
@@ -67,7 +66,6 @@ export default function Home() {
           animation-iteration-count: infinite;
           z-index: 0;
         }
-        /* Ensure content sits above hearts */
         .content-layer {
           position: relative;
           z-index: 10;
@@ -79,7 +77,7 @@ export default function Home() {
         }
       `}</style>
 
-      {/* --- THE HEARTS BACKGROUND --- */}
+      {/* --- RENDER HEARTS --- */}
       {hearts.map((h) => (
         <div
           key={h.id}
@@ -95,7 +93,7 @@ export default function Home() {
         </div>
       ))}
 
-      {/* --- MAIN CONTENT LAYER --- */}
+      {/* --- MAIN CONTENT --- */}
       <div className="content-layer">
         {!entered ? (
           <button className="landing-btn" onClick={handleMainClick}>
@@ -111,7 +109,6 @@ export default function Home() {
               <a className="choice-btn">Daily Affirmations</a>
             </Link>
 
-            {/* Secret vault button */}
             <button
               onClick={openSecret}
               style={{
