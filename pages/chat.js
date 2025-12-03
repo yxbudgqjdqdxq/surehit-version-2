@@ -202,7 +202,7 @@ export default function ChatPage() {
 
         {error && <div style={{ color: "crimson", marginTop: 12 }}>{error}</div>}
 
-        {/* --- 2. UPDATED BUTTON (Larger Star & Better Proportions) --- */}
+        {/* --- 2. THE CORRECTED RAVENS BUTTON --- */}
         <div style={{ textAlign: "center", marginTop: 40 }}>
            <button
              onClick={() => setUseOffline(true)}
@@ -213,9 +213,10 @@ export default function ChatPage() {
                display: "inline-flex",
                alignItems: "center",
                justifyContent: "center",
-               gap: "14px", 
+               // Guidelines: Spacing set to 12px for visual separation
+               gap: "12px", 
                padding: "10px 20px",
-               opacity: 0.9, 
+               opacity: 0.85, 
                transition: "transform 0.2s, opacity 0.2s"
              }}
              onMouseOver={(e) => {
@@ -223,23 +224,34 @@ export default function ChatPage() {
                 e.currentTarget.style.transform = 'scale(1.02)';
              }}
              onMouseOut={(e) => {
-                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.opacity = '0.85';
                 e.currentTarget.style.transform = 'scale(1)';
              }}
            >
-             {/* INCREASED SIZE TO 45px + ADDED SHADOW */}
+             {/* Guidelines: Standard size 36px. 
+                Matches visual weight of 18px text.
+                Vertical alignment centered.
+             */}
              <img 
                 src="/ravens-star.png" 
                 alt="Ravens" 
                 style={{ 
-                    width: 45, 
-                    height: 45, 
+                    width: "36px", 
+                    height: "36px", 
                     objectFit: "contain",
-                    filter: "drop-shadow(0 0 8px rgba(0, 150, 255, 0.4))"
+                    display: "block" // Removes inline spacing issues
                 }} 
              />
              
-             <span style={{ fontSize: 16, fontWeight: 600, color: "#333", fontFamily: "sans-serif", letterSpacing: "0.5px" }}>
+             {/* Guidelines: Text centered relative to icon block */}
+             <span style={{ 
+                fontSize: "18px", 
+                fontWeight: 600, 
+                color: "#555", 
+                fontFamily: "Inter, sans-serif", 
+                letterSpacing: "0.4px",
+                lineHeight: "1" // Ensures text centers with icon
+             }}>
                Switch to Ravens Protocol
              </span>
            </button>
