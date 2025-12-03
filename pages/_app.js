@@ -1,5 +1,5 @@
 // pages/_app.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Script from "next/script";
 import AnimatedBackground from "../components/AnimatedBackground";
@@ -30,7 +30,7 @@ export default function MyApp({ Component, pageProps }) {
     </svg>
   `);
 
-  // --- 1. LISTEN FOR RAVENS PROTOCOL SIGNALS ---
+  // --- 1. RAVENS SILENCE LOGIC ---
   useEffect(() => {
     const handleRavens = (e) => {
       const active = e.detail;
@@ -38,17 +38,13 @@ export default function MyApp({ Component, pageProps }) {
       if (active && audioRef.current) {
         audioRef.current.pause();
         setIsPlaying(false);
-      } else if (!active && audioRef.current && !isPlaying) {
-         // Optional: Resume on close
-         audioRef.current.play().catch(() => {});
-         setIsPlaying(true);
       }
     };
     window.addEventListener('ravens-toggle', handleRavens);
     return () => window.removeEventListener('ravens-toggle', handleRavens);
-  }, [isPlaying]);
+  }, []);
 
-  // --- 2. GLOBAL AUTO-START MUSIC ---
+  // --- 2. AUTO-PLAY MUSIC ---
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -56,7 +52,6 @@ export default function MyApp({ Component, pageProps }) {
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => setIsPlaying(true)).catch(() => {
-          // Browser blocked auto-play? Wait for interaction
           const enableAudio = () => {
              if (!isRavensActive) {
                 audio.play();
@@ -76,21 +71,18 @@ export default function MyApp({ Component, pageProps }) {
     if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
     else { audioRef.current.play(); setIsPlaying(true); }
   };
-  
   const nextSong = () => {
     let next = currentSongIndex + 1;
     if (next >= PLAYLIST.length) next = 0;
     setCurrentSongIndex(next);
     setIsPlaying(true);
   };
-  
   const prevSong = () => {
     let prev = currentSongIndex - 1;
     if (prev < 0) prev = PLAYLIST.length - 1;
     setCurrentSongIndex(prev);
     setIsPlaying(true);
   };
-
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -124,20 +116,18 @@ export default function MyApp({ Component, pageProps }) {
         }}
       />
 
-      {/* GLOBAL AUDIO ELEMENT */}
+      {/* --- GLOBAL AUDIO --- */}
       <audio ref={audioRef} src={PLAYLIST[currentSongIndex]} onEnded={nextSong} />
 
-      {/* Mount the animated background once at the app level */}
+      {/* --- YOUR ORIGINAL BACKGROUND & HEADER --- */}
       <AnimatedBackground />
-
-      {/* Add the Header component here */}
       <Header />
 
       <div className="site-root">
         <Component {...pageProps} />
       </div>
 
-      {/* GLOBAL VIBE PLAYER (Hidden if Ravens is Active) */}
+      {/* --- GLOBAL MUSIC UI (Hidden if Ravens is Active) --- */}
       {!isRavensActive && (
         <div style={{
             position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
