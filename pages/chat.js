@@ -16,7 +16,7 @@ export default function ChatPage() {
   // Controls the Ravens Protocol UI
   const [useOffline, setUseOffline] = useState(false);
 
-  // --- SEND SIGNAL TO _APP.JS TO STOP/START MUSIC ---
+  // --- SEND SIGNAL TO _APP.JS TO STOP MUSIC ---
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: useOffline }));
     return () => {
@@ -144,7 +144,7 @@ export default function ChatPage() {
         </form>
 
         <div style={{ textAlign: "center", marginTop: 40 }}>
-           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85 }}>
+           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85, transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
              <img src="/ravens-star.png" alt="Ravens" style={{ width: "32px", height: "32px", objectFit: "contain", display: "block" }} />
              <span style={{ fontSize: "15px", fontWeight: 500, color: "#444", fontFamily: "Inter, sans-serif" }}>Switch to Ravens Protocol</span>
            </button>
