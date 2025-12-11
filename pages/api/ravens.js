@@ -2,7 +2,7 @@ import Groq from "groq-sdk";
 
 // Initialize the Brain
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY || "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"
+  apiKey: process.env.GROQ_API_KEY
 });
 
 // *** UPDATED TO THE NEW WORKING MODEL ***
