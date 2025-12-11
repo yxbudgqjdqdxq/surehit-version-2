@@ -54,10 +54,10 @@ export default function AnimatedBackground() {
       <div
         className="hearts-container"
         style={{
-          position: "absolute",
+          position: "fixed",
           inset: 0,
           pointerEvents: "none",
-          zIndex: heartsZ,
+          zIndex: 0,
           overflow: "visible",
         }}
       >
