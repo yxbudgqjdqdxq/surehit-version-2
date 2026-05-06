@@ -57,9 +57,14 @@ export default function MyApp({ Component, pageProps }) {
       <div className="site-root">
         <Component {...pageProps} />
       </div>
-      <div className={`spotify-floating-player ${isScrolled ? "minimized" : ""}`}>
-        <div className="music-icon">🎵</div>
-        <div className="player-content">
+      <div className={`spotify-widget-container ${isScrolled ? "minimized" : ""}`}>
+        <div 
+          className="spotify-mini-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          🎵
+        </div>
+        <div className="spotify-full-player">
           <iframe
             title="Spotify playlist"
             src="https://open.spotify.com/embed/playlist/4ynbsNBDEnc5Pyg8Dm4szL?utm_source=generator&theme=0"

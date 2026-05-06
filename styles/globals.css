@@ -143,65 +143,69 @@ body::before{
 .paragraph-view{ width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px; box-sizing:border-box; }
 .paragraph-card{ max-width:820px; width:100%; padding:26px; border-radius:16px; background: rgba(255,255,255,0.92); box-shadow: 0 18px 60px rgba(15,10,20,0.06); color:#231b20; }
 .para-body p{ margin: 12px 0; line-height:1.7; color:#3b2b36 }
-.spotify-floating-player{
+.spotify-widget-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 9999;
+  /* Separate the sizing/animation completely from the main container */
+}
+
+/* The tiny floating button */
+.spotify-mini-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(255, 117, 140, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+
+/* The large player card */
+.spotify-full-player {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(255, 117, 140, 0.15), 0 2px 10px rgba(0, 0, 0, 0.04);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: float-player 6s ease-in-out infinite;
-  overflow: hidden;
-  width: 304px;
-  height: 148px;
-}
-.spotify-floating-player:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 44px rgba(255, 117, 140, 0.22), 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-.spotify-floating-player.minimized {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  bottom: 24px;
-}
-.music-icon {
-  position: absolute;
-  font-size: 22px;
-  opacity: 0;
-  transform: scale(0.5);
-  pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.spotify-floating-player.minimized .music-icon {
-  opacity: 1;
-  transform: scale(1);
-}
-.player-content {
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 12px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-sizing: border-box;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
+  transform-origin: bottom right;
 }
-.spotify-floating-player.minimized .player-content {
+
+/* SCROLLED/MINIMIZED STATE */
+.spotify-widget-container.minimized .spotify-full-player {
   opacity: 0;
+  transform: scale(0.6) translateY(20px);
   pointer-events: none;
-  transform: scale(0.8);
 }
-.spotify-floating-player iframe{
+.spotify-widget-container.minimized .spotify-mini-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.spotify-full-player iframe{
   width: 280px;
   height: 80px;
   display: block;
@@ -235,30 +239,28 @@ body::before{
   background: rgba(255, 90, 158, 0.15);
   transform: scale(1.04);
 }
-@keyframes float-player {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
-}
+
 @media (max-width: 600px) {
-  .spotify-floating-player {
+  .spotify-widget-container {
     bottom: 24px;
     right: 50%;
     transform: translateX(50%);
     width: calc(100% - 32px);
     max-width: 360px;
-    border-radius: 24px;
-    animation: none;
   }
-  .spotify-floating-player.minimized {
-    right: 24px;
-    transform: translateX(0) translateY(0);
-    width: 56px;
-    height: 56px;
+  .spotify-full-player {
+    width: 100%;
+    transform-origin: bottom center;
   }
-  .spotify-floating-player:hover { transform: translateX(50%); /* prevent hover jump on mobile */ }
-  .spotify-floating-player.minimized:hover { transform: translateY(-4px); }
-  .spotify-floating-player iframe { width: 100%; height: 80px; }
+  .spotify-full-player iframe { width: 100%; height: 80px; }
   .spotify-note { max-width: 100%; }
+
+  /* Adjust the mini button on mobile so it pops up in the corner instead of center */
+  .spotify-widget-container.minimized {
+    right: 24px;
+    transform: none;
+    width: 56px;
+  }
 }
 
 .chat-page{ width:100%; padding: 36px; display:flex; flex-direction:column; align-items:center; gap:18px; }
