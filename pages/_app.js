@@ -46,6 +46,18 @@ export default function MyApp({ Component, pageProps }) {
       <div className="site-root">
         <Component {...pageProps} />
       </div>
+      <div className="spotify-floating-player">
+        <iframe
+          title="Spotify playlist"
+          src="https://open.spotify.com/embed/playlist/4ynbsNBDEnc5Pyg8Dm4szL?utm_source=generator&theme=0"
+          width="300"
+          height="80"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allowFullScreen
+          loading="lazy"
+        />
+      </div>
 
     </>
   );
