@@ -9,15 +9,23 @@ import "../styles/globals.css";
 const GA_MEASUREMENT_ID = "G-VFD4DC3SSE";
 
 export default function MyApp({ Component, pageProps }) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isSpotifyMinimized, setIsSpotifyMinimized] = useState(false);
+  const [isHoveringSpotify, setIsHoveringSpotify] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    let timeoutId;
+    if (!isHoveringSpotify) {
+      // If we are not hovering over the widget, start the idle timer to shrink it
+      timeoutId = setTimeout(() => {
+        setIsSpotifyMinimized(true);
+      }, 3500); // Shrinks after 3.5 seconds of not touching it
+    } else {
+      // If we hover over it, keep it expanded
+      setIsSpotifyMinimized(false);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [isHoveringSpotify]);
 
   const faviconSvg = encodeURIComponent(`
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
@@ -57,10 +65,14 @@ export default function MyApp({ Component, pageProps }) {
       <div className="site-root">
         <Component {...pageProps} />
       </div>
-      <div className={`spotify-widget-container ${isScrolled ? "minimized" : ""}`}>
+      <div 
+        className={`spotify-widget-container ${isSpotifyMinimized ? "minimized" : ""}`}
+        onMouseEnter={() => setIsHoveringSpotify(true)}
+        onMouseLeave={() => setIsHoveringSpotify(false)}
+      >
         <div 
           className="spotify-mini-btn"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => setIsHoveringSpotify(true)}
         >
           🎵
         </div>

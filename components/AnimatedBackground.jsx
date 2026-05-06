@@ -31,9 +31,10 @@ export default function AnimatedBackground() {
       const rotate = Math.round(rand(-24, 24));    
       const floatAmt = Number(rand(6, 28).toFixed(2));  
       
-      // Select random colors here
-      const colorA = ["#ff7aa8", "#ff8fb3", "#ff6fa1", "#ff9ed1"][Math.floor(rand(0,4))];
-      const colorB = ["#ffd1e8", "#ffc0de", "#ffd8f0", "#ffc8e6"][Math.floor(rand(0,4))];
+      // Select random colors using the explicit provided palette
+      const palette = ["#F7DAE7", "#E2B4C1", "#D38C9D", "#A55166"];
+      const colorA = palette[Math.floor(rand(0, 4))];
+      const colorB = palette[Math.floor(rand(0, 4))];
       
       return { id: i, top, size, duration, delay, rotate, floatAmt, colorA, colorB };
     });
