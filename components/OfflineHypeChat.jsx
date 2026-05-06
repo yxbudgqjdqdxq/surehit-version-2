@@ -60,7 +60,9 @@ export default function RavensProtocolPage() {
 
   // --- 2. AUTO SCROLL ---
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > 0 || status === "GENERATING") {
+      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages, status]);
 
   // --- 3. SEND HANDLER (API CALL) ---
@@ -175,9 +177,15 @@ export default function RavensProtocolPage() {
 
         /* The Hero Void Entry Sequence */
         .shingan-hero { 
-          display: flex; flex-direction: column; align-items: center; 
-          justify-content: center; height: 70vh; text-align: center;
+          position: absolute; top: 0; left: 0; right: 0; 
+          height: 70vh; display: flex; flex-direction: column; 
+          align-items: center; justify-content: center; text-align: center;
+          pointer-events: none; z-index: 5;
         }
+        .shingan-hero.has-messages {
+          animation: smokeOut 1.5s ease forwards;
+        }
+
         .hero-kanji {
           font-family: 'Cormorant Garamond', serif;
           font-size: 4rem; color: #F7DAE7; font-weight: 300;
@@ -202,10 +210,6 @@ export default function RavensProtocolPage() {
           font-size: 0.75rem; letter-spacing: 2px; color: #D38C9D;
           opacity: 0; animation: bleedIn 2s ease forwards;
           animation-delay: 4.5s; margin-top: 24px;
-        }
-        
-        .hero-layer {
-           animation: ${input.length > 0 ? 'smokeOut 2s ease forwards' : 'none'};
         }
 
         /* Message Layout */
@@ -281,18 +285,16 @@ export default function RavensProtocolPage() {
       </header>
 
       <main className="shingan-main">
-        {isHeroMode && (
-          <div className="shingan-hero hero-layer">
-            <div className="hero-kanji">
-              <span className="kanji-char">真</span>
-              <span className="kanji-char">贋</span>
-              <span className="kanji-char">相</span>
-              <span className="kanji-char">愛</span>
-            </div>
-            <div className="hero-romaji">shin-gan sō-ai</div>
-            <div className="hero-translation">"authentic and counterfeit mutual love"</div>
+        <div className={`shingan-hero ${messages.length > 0 ? 'has-messages' : ''}`}>
+          <div className="hero-kanji">
+            <span className="kanji-char">真</span>
+            <span className="kanji-char">贋</span>
+            <span className="kanji-char">相</span>
+            <span className="kanji-char">愛</span>
           </div>
-        )}
+          <div className="hero-romaji">shin-gan sō-ai</div>
+          <div className="hero-translation">"authentic and counterfeit mutual love"</div>
+        </div>
 
         <div className="shingan-chat-list">
           {messages.map((m, i) => (
