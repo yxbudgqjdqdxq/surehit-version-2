@@ -199,37 +199,133 @@ export default function ChatPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Playfair Display', serif" }}>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:ital,wght@0,300;0,400;1,300&family=Great+Vibes&display=swap');
+        
+        .pinterest-btn {
+          padding: 10px 20px;
+          border-radius: 30px;
+          border: 1px solid rgba(0,0,0,0.1);
+          background: rgba(255,255,255,0.5);
+          backdrop-filter: blur(10px);
+          color: #4a3b3e;
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          letter-spacing: 0.5px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .pinterest-btn:hover {
+          background: rgba(255,255,255,0.9);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .primary-btn {
+          padding: 12px 24px;
+          border-radius: 30px;
+          border: none;
+          background: #d99aa9;
+          color: white;
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          box-shadow: 0 4px 15px rgba(217, 154, 169, 0.3);
+        }
+        .primary-btn:hover {
+          background: #c58596;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(217, 154, 169, 0.4);
+        }
+        .soft-input {
+          flex: 1;
+          padding: 14px 20px;
+          border-radius: 20px;
+          border: 1px solid rgba(0,0,0,0.05);
+          background: rgba(255,255,255,0.7);
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          color: #4a3b3e;
+          transition: all 0.3s ease;
+          outline: none;
+        }
+        .soft-input:focus {
+          background: rgba(255,255,255,0.95);
+          border-color: rgba(217, 154, 169, 0.5);
+          box-shadow: 0 0 0 3px rgba(217, 154, 169, 0.1);
+        }
+        .aesthetic-card {
+          background: rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.8);
+          padding: 40px;
+          min-height: 280px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.04), inset 0 0 0 1px rgba(255,255,255,0.5);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+        }
+        .aesthetic-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        }
+      `}</style>
       {useOffline ? <OfflineHypeChat personaName={"Ayesha"} /> : null}
 
-      <div style={{ width: "100%", maxWidth: 920 }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <div>
-            <h1 style={{ margin: 0 }}>Daily Affirmations</h1>
-            <div style={{ color: "rgba(0,0,0,0.6)", fontSize: 13 }}>For my baby — love, comfort, and endless hype.</div>
+      <div style={{ width: "100%", maxWidth: 800, position: "relative", zIndex: 1 }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <h1 style={{ margin: 0, fontWeight: 500, fontSize: "2.5rem", color: "#3a2e31", letterSpacing: "-0.5px" }}>Daily Affirmations</h1>
+            <div style={{ color: "#7a6b6e", fontFamily: "'Great Vibes', cursive", fontSize: "1.4rem", marginTop: "-4px" }}>
+              words I'd whisper to you if I were right there.
+            </div>
           </div>
-          <button onClick={handleAnother} disabled={loading} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.18)", color: "#000" }}>Another one</button>
+          <button onClick={handleAnother} disabled={loading} className="pinterest-btn">
+            Another one
+          </button>
         </header>
 
-        <main ref={cardRef} style={{ background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: 30, minHeight: 240, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}>
-          {!reply ? <div style={{ textAlign: "center", color: "#333" }}>Hypeman is waking up…</div> : 
-            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", lineHeight: "1.4", whiteSpace: "pre-wrap" }}>{reply}</div>
+        <main ref={cardRef} className="aesthetic-card">
+          {!reply ? <div style={{ textAlign: "center", color: "#8a7a7e", fontFamily: "'Lato', sans-serif" }}>gathering my thoughts...</div> : 
+            <div style={{ fontSize: "clamp(20px, 2.5vw, 26px)", textAlign: "center", color: "#3a2e31", lineHeight: "1.5", whiteSpace: "pre-wrap", fontWeight: 400, fontStyle: "italic" }}>
+              "{reply}"
+            </div>
           }
-          <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong></div>
+          <div style={{ position: "absolute", bottom: 24, left: 0, right: 0, textAlign: "center", color: "#9a8a8e", fontFamily: "'Lato', sans-serif", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px" }}>
+            Mood: <strong style={{ fontWeight: 600, color: "#d99aa9" }}>{mood}</strong>
+          </div>
         </main>
 
-        <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 16 }}>
-          <input value={input} onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} placeholder="Type how you are feeling..." style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }} disabled={loading} />
-          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>Send</button>
+        <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 24 }}>
+          <input 
+            value={input} 
+            onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} 
+            placeholder="Tell me what's on your mind..." 
+            className="soft-input"
+            disabled={loading} 
+          />
+          <button type="submit" disabled={loading} className="primary-btn">
+            {loading ? "Sending..." : "Send"}
+          </button>
         </form>
 
         <div style={{ textAlign: "center", marginTop: 40 }}>
-           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85, transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.02)"} onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}>
-             <img src="/ravens-star.png" alt="Ravens" style={{ width: "32px", height: "32px", objectFit: "contain", display: "block" }} />
-             <span style={{ fontSize: "15px", fontWeight: 500, color: "#444", fontFamily: "Inter, sans-serif" }}>Switch to Ravens Protocol</span>
+           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", transition: "transform 0.3s ease", opacity: 0.7 }} onMouseOver={(e) => {e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.opacity = "1"}} onMouseOut={(e) => {e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.opacity = "0.7"}}>
+             <img src="/ravens-star.png" alt="Ravens" style={{ width: "24px", height: "24px", objectFit: "contain", display: "block", filter: "grayscale(100%) opacity(0.8)" }} />
+             <span style={{ fontSize: "13px", fontWeight: 400, color: "#5a4a4e", fontFamily: "'Lato', sans-serif", letterSpacing: "0.5px" }}>Switch to Ravens Protocol</span>
            </button>
         </div>
-        <footer style={{ marginTop: 24, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Tip: A short sentence works best.</footer>
       </div>
     </div>
   );
