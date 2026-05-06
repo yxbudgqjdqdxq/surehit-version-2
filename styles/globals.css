@@ -206,7 +206,7 @@ body::before{
 }
 
 .spotify-full-player iframe{
-  width: 280px;
+  width: 320px;
   height: 80px;
   display: block;
   border: 0;
@@ -218,12 +218,12 @@ body::before{
   font-weight: 500;
   text-align: center;
   color:#634d58;
-  max-width: 260px;
+  max-width: 300px;
   line-height: 1.4;
 }
 .spotify-fallback{
   display: inline-block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 11px;
   font-weight: 800;
   color: #ff5a9e;
@@ -231,7 +231,7 @@ body::before{
   letter-spacing: 0.6px;
   text-decoration: none;
   background: rgba(255, 90, 158, 0.08);
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 20px;
   transition: background 0.2s ease, transform 0.2s ease;
 }
