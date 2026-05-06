@@ -1,12 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 
-/**
- * RAVEN'S PROTOCOL - CLOUD UPLINK (V14)
- * * ARCHITECTURE: Switched from Local WebGPU to Groq Cloud API.
- * * SPEED: <1s Response Time.
- * * LOGIC: Retains the "Eternal Loop" typing effect for smooth UI.
- */
+/* Updated purely local implementation */
 
 export default function RavensProtocolPage() {
   // --- STATE ---
