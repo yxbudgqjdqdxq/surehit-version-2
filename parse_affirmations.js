@@ -1,0 +1,53 @@
+const fs = require('fs');
+const path = require('path');
+const inputPath = 'c:\\Users\\asifa\\Downloads\\affirmations_250.txt';
+const outputPath = path.join(__dirname, 'public/data/affirmations.json');
+const text = fs.readFileSync(inputPath, 'utf8');
+const lines = text.split('\n');
+
+const affirmations = {};
+const bMap = {
+  'SAD': 'sad', 'GRUMPY': 'grumpy', 'HAPPY': 'happy', 'LOVE': 'love', 
+  'DEEP': 'deep', 'BORED': 'bored', 'NERVOUS': 'nervous', 
+  'CONFIDENT': 'confident', 'PLAYFUL': 'playful', 'NEUTRAL': 'neutral'
+};
+const vMap = {
+  'V1': 'soft', 'V2': 'hype', 'V3': 'deep', 'AD': 'asif_drop'
+};
+
+for (const v of Object.values(bMap)) {
+  affirmations[v] = [];
+}
+
+let currentBucket = null;
+let i = 0;
+while (i < lines.length) {
+  const line = lines[i].trim();
+  const bMatch = line.match(/^BUCKET \d+: ([A-Z]+)/);
+  if (bMatch) {
+    currentBucket = bMap[bMatch[1]];
+  }
+
+  const idMatch = line.match(/^\[([A-Z]+)-(V1|V2|V3|AD)-(\d+)\]$/);
+  if (idMatch) {
+    const vTag = idMatch[2];
+    const textBuffer = [];
+    i++;
+    while (i < lines.length && lines[i].trim() !== '') {
+      textBuffer.push(lines[i].trim());
+      i++;
+    }
+    if (currentBucket && textBuffer.length > 0) {
+      affirmations[currentBucket].push({
+        id: idMatch[0].replace(/\[|\]/g, ''),
+        voice: vMap[vTag],
+        text: textBuffer.join(' ')
+      });
+    }
+  } else {
+    i++;
+  }
+}
+
+fs.writeFileSync(outputPath, JSON.stringify(affirmations, null, 2));
+console.log('Successfully wrote to', outputPath);

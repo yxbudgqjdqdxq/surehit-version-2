@@ -1,0 +1,1272 @@
+{
+  "sad": [
+    {
+      "id": "SAD-V1-01",
+      "voice": "soft",
+      "text": "hey. rough day? or is it one of those where you don't even know why it's heavy"
+    },
+    {
+      "id": "SAD-V1-02",
+      "voice": "soft",
+      "text": "I don't know what today did to you but I hope it wasn't too much."
+    },
+    {
+      "id": "SAD-V1-03",
+      "voice": "soft",
+      "text": "you're allowed to just sit with it for a bit. you don't have to be okay yet"
+    },
+    {
+      "id": "SAD-V1-04",
+      "voice": "soft",
+      "text": "what's going on? and I mean actually. not the surface version"
+    },
+    {
+      "id": "SAD-V1-05",
+      "voice": "soft",
+      "text": "the way you're still here even when everything feels like too much. that's not nothing."
+    },
+    {
+      "id": "SAD-V1-06",
+      "voice": "soft",
+      "text": "I hope someone checked on you today. genuinely. did they?"
+    },
+    {
+      "id": "SAD-V1-07",
+      "voice": "soft",
+      "text": "it's okay if today broke you a little. you've come back from worse"
+    },
+    {
+      "id": "SAD-V1-08",
+      "voice": "soft",
+      "text": "some days are just heavy. this might be one of them. that's allowed."
+    },
+    {
+      "id": "SAD-V2-01",
+      "voice": "hype",
+      "text": "okay but you're SAD and still THAT put together?? unfair actually 😭"
+    },
+    {
+      "id": "SAD-V2-02",
+      "voice": "hype",
+      "text": "listen. you felt something real today. that takes guts and most people don't even get there"
+    },
+    {
+      "id": "SAD-V2-03",
+      "voice": "hype",
+      "text": "CRY IF YOU NEED TO. seriously. get it all out. you'll feel lighter after I promise"
+    },
+    {
+      "id": "SAD-V2-04",
+      "voice": "hype",
+      "text": "the fact that you're even here right now instead of just suffering alone?? growth actually"
+    },
+    {
+      "id": "SAD-V2-05",
+      "voice": "hype",
+      "text": "bad day doesn't mean bad life and I need you to HEAR that rn"
+    },
+    {
+      "id": "SAD-V2-06",
+      "voice": "hype",
+      "text": "you're allowed to fall apart a little. just not forever. there's a difference"
+    },
+    {
+      "id": "SAD-V2-07",
+      "voice": "hype",
+      "text": "okay so today was terrible. noted. tomorrow you come back different tho"
+    },
+    {
+      "id": "SAD-V2-08",
+      "voice": "hype",
+      "text": "being sad doesn't make you weak it makes you someone who actually feels things. that's rare 😭"
+    },
+    {
+      "id": "SAD-V3-01",
+      "voice": "deep",
+      "text": "the version of you that cries alone and still shows up the next day. that one does something to me"
+    },
+    {
+      "id": "SAD-V3-02",
+      "voice": "deep",
+      "text": "you feel things deeply. that's not a flaw. it just costs more than most people know"
+    },
+    {
+      "id": "SAD-V3-03",
+      "voice": "deep",
+      "text": "I think you've been holding this longer than you're letting on"
+    },
+    {
+      "id": "SAD-V3-04",
+      "voice": "deep",
+      "text": "sadness means something mattered. remember that when it gets heavy"
+    },
+    {
+      "id": "SAD-V3-05",
+      "voice": "deep",
+      "text": "the way you carry pain quietly and still try to be okay for everyone else. I see that"
+    },
+    {
+      "id": "SAD-V3-06",
+      "voice": "deep",
+      "text": "you don't have to explain it. some things just hurt and that's the whole sentence"
+    },
+    {
+      "id": "SAD-V3-07",
+      "voice": "deep",
+      "text": "there's a specific kind of tired that has nothing to do with sleep. I think you know it"
+    },
+    {
+      "id": "SAD-V3-08",
+      "voice": "deep",
+      "text": "whatever today took from you. you'll find a version of it again. maybe better"
+    },
+    {
+      "id": "SAD-AD-01",
+      "voice": "asif_drop",
+      "text": "I don't ask how you're doing enough. I know that. I just notice when something's off about you and sit with it instead of saying anything. I'm working on that"
+    }
+  ],
+  "grumpy": [
+    {
+      "id": "GR-V1-01",
+      "voice": "soft",
+      "text": "okay who upset you. actually. I want to know"
+    },
+    {
+      "id": "GR-V1-02",
+      "voice": "soft",
+      "text": "you're allowed to be annoyed. fully. without explaining yourself to anyone"
+    },
+    {
+      "id": "GR-V1-03",
+      "voice": "soft",
+      "text": "is it one specific thing or has everything just been a lot lately"
+    },
+    {
+      "id": "GR-V1-04",
+      "voice": "soft",
+      "text": "the way you look when you're trying not to say something you're thinking. I kind of love that"
+    },
+    {
+      "id": "GR-V1-05",
+      "voice": "soft",
+      "text": "whatever it is. it's real and you don't owe anyone a calm reaction today"
+    },
+    {
+      "id": "GR-V1-06",
+      "voice": "soft",
+      "text": "mad looks different on you than it does on most people. just saying"
+    },
+    {
+      "id": "GR-V1-07",
+      "voice": "soft",
+      "text": "do you want to vent? actually vent? I'm here for it"
+    },
+    {
+      "id": "GR-V1-08",
+      "voice": "soft",
+      "text": "some days the whole world is just wrong and there's no fixing it. today one of those?"
+    },
+    {
+      "id": "GR-V2-01",
+      "voice": "hype",
+      "text": "BESTIE WHO DID THIS. I need names 😭"
+    },
+    {
+      "id": "GR-V2-02",
+      "voice": "hype",
+      "text": "the audacity of people sometimes I swear. you have every right to be heated rn"
+    },
+    {
+      "id": "GR-V2-03",
+      "voice": "hype",
+      "text": "okay but petty looks really good on you ngl"
+    },
+    {
+      "id": "GR-V2-04",
+      "voice": "hype",
+      "text": "MAD?? GOOD. use it. channel it. become unstoppable out of spite"
+    },
+    {
+      "id": "GR-V2-05",
+      "voice": "hype",
+      "text": "your patience ran out and honestly?? it held on longer than most people's would have"
+    },
+    {
+      "id": "GR-V2-06",
+      "voice": "hype",
+      "text": "the rage is valid. the vibe is immaculate. carry on"
+    },
+    {
+      "id": "GR-V2-07",
+      "voice": "hype",
+      "text": "whoever caused this today really thought they could?? the disrespect 😭"
+    },
+    {
+      "id": "GR-V2-08",
+      "voice": "hype",
+      "text": "being annoyed doesn't make you difficult. it makes you someone with actual standards"
+    },
+    {
+      "id": "GR-V3-01",
+      "voice": "deep",
+      "text": "the thing about you is you only get this frustrated when something actually mattered to you"
+    },
+    {
+      "id": "GR-V3-02",
+      "voice": "deep",
+      "text": "anger is just hurt that got tired of being quiet"
+    },
+    {
+      "id": "GR-V3-03",
+      "voice": "deep",
+      "text": "you hold your tongue more than people realize. when you finally speak it means something"
+    },
+    {
+      "id": "GR-V3-04",
+      "voice": "deep",
+      "text": "the fact that it bothers you means your standards are still intact. that's not a bad thing"
+    },
+    {
+      "id": "GR-V3-05",
+      "voice": "deep",
+      "text": "I think underneath the irritation there's something that just needed to be handled with more care"
+    },
+    {
+      "id": "GR-V3-06",
+      "voice": "deep",
+      "text": "you don't have to forgive it today. you just have to get through today"
+    },
+    {
+      "id": "GR-V3-07",
+      "voice": "deep",
+      "text": "some people bring out the worst in you not because you're weak but because they keep testing what they shouldn't"
+    },
+    {
+      "id": "GR-V3-08",
+      "voice": "deep",
+      "text": "the way you stay composed when everything in you wants to say exactly what you think. that discipline is underrated"
+    },
+    {
+      "id": "GR-AD-01",
+      "voice": "asif_drop",
+      "text": "I've watched you be patient with people who didn't deserve it more times than I can count. the fact that you're finally fed up doesn't make you difficult. it makes you human"
+    }
+  ],
+  "happy": [
+    {
+      "id": "HA-V1-01",
+      "voice": "soft",
+      "text": "okay you seem good today. genuinely. what happened?"
+    },
+    {
+      "id": "HA-V1-02",
+      "voice": "soft",
+      "text": "whatever's making you smile right now. hold onto it a little longer"
+    },
+    {
+      "id": "HA-V1-03",
+      "voice": "soft",
+      "text": "happy looks good on you. like actually good"
+    },
+    {
+      "id": "HA-V1-04",
+      "voice": "soft",
+      "text": "this version of you. the light one. I hope she stays for a while"
+    },
+    {
+      "id": "HA-V1-05",
+      "voice": "soft",
+      "text": "something shifted today didn't it. I can tell"
+    },
+    {
+      "id": "HA-V1-06",
+      "voice": "soft",
+      "text": "what's got you like this? I want to know"
+    },
+    {
+      "id": "HA-V1-07",
+      "voice": "soft",
+      "text": "you deserve days that feel this easy. more of them actually"
+    },
+    {
+      "id": "HA-V1-08",
+      "voice": "soft",
+      "text": "the way you are when things are good. that's your real default. remember that"
+    },
+    {
+      "id": "HA-V2-01",
+      "voice": "hype",
+      "text": "SHE'S HAPPY?? TODAY IS A GOOD DAY FOR EVERYONE 😭"
+    },
+    {
+      "id": "HA-V2-02",
+      "voice": "hype",
+      "text": "okay the vibes are immaculate rn and I'm fully here for it"
+    },
+    {
+      "id": "HA-V2-03",
+      "voice": "hype",
+      "text": "THIS ENERGY. keep it. protect it. don't let anyone touch it today"
+    },
+    {
+      "id": "HA-V2-04",
+      "voice": "hype",
+      "text": "you being happy is genuinely contagious and I hope you know that"
+    },
+    {
+      "id": "HA-V2-05",
+      "voice": "hype",
+      "text": "whatever you did today to get here?? do it again tomorrow"
+    },
+    {
+      "id": "HA-V2-06",
+      "voice": "hype",
+      "text": "the smile is doing things and you know it 😭"
+    },
+    {
+      "id": "HA-V2-07",
+      "voice": "hype",
+      "text": "happy day? happy day. let's go. nothing is stopping you today"
+    },
+    {
+      "id": "HA-V2-08",
+      "voice": "hype",
+      "text": "okay you're literally glowing rn and it's making me feel things"
+    },
+    {
+      "id": "HA-V3-01",
+      "voice": "deep",
+      "text": "I like when you let yourself just be happy without immediately waiting for something to ruin it"
+    },
+    {
+      "id": "HA-V3-02",
+      "voice": "deep",
+      "text": "the light version of you is the real one. the heavy days are just visitors"
+    },
+    {
+      "id": "HA-V3-03",
+      "voice": "deep",
+      "text": "you've had enough hard days to really earn this one. sit in it fully"
+    },
+    {
+      "id": "HA-V3-04",
+      "voice": "deep",
+      "text": "there's a specific laugh you have when something catches you off guard. I think about that"
+    },
+    {
+      "id": "HA-V3-05",
+      "voice": "deep",
+      "text": "happy suits you in a way that's hard to explain. it just fits"
+    },
+    {
+      "id": "HA-V3-06",
+      "voice": "deep",
+      "text": "you don't always let yourself feel good things without guilt. today feels different"
+    },
+    {
+      "id": "HA-V3-07",
+      "voice": "deep",
+      "text": "the way your whole face changes when something genuinely makes you happy. that's everything"
+    },
+    {
+      "id": "HA-V3-08",
+      "voice": "deep",
+      "text": "days like this are why you get through the heavy ones. hold the memory of this one"
+    },
+    {
+      "id": "HA-AD-01",
+      "voice": "asif_drop",
+      "text": "there was one moment where you laughed and didn't think about it. just laughed. I wasn't expecting it and I wasn't expecting what it did to me either"
+    }
+  ],
+  "love": [
+    {
+      "id": "LO-V1-01",
+      "voice": "soft",
+      "text": "feeling soft today? that's okay. you're allowed to be"
+    },
+    {
+      "id": "LO-V1-02",
+      "voice": "soft",
+      "text": "the way you love people. carefully. quietly. it's a specific thing"
+    },
+    {
+      "id": "LO-V1-03",
+      "voice": "soft",
+      "text": "whoever has your heart right now. I hope they know what that actually means"
+    },
+    {
+      "id": "LO-V1-04",
+      "voice": "soft",
+      "text": "you okay? like heart okay?"
+    },
+    {
+      "id": "LO-V1-05",
+      "voice": "soft",
+      "text": "the love you give out. does any of it come back to you the way it should?"
+    },
+    {
+      "id": "LO-V1-06",
+      "voice": "soft",
+      "text": "being this open takes something most people don't have. you know that right?"
+    },
+    {
+      "id": "LO-V1-07",
+      "voice": "soft",
+      "text": "soft days are good days. don't let anyone rush you out of this one"
+    },
+    {
+      "id": "LO-V1-08",
+      "voice": "soft",
+      "text": "you feel things deeply when it comes to people you care about. I notice that about you"
+    },
+    {
+      "id": "LO-V2-01",
+      "voice": "hype",
+      "text": "SOFT AND SWEET TODAY?? the universe said choose joy and you said yes 😭"
+    },
+    {
+      "id": "LO-V2-02",
+      "voice": "hype",
+      "text": "okay you're literally in your feelings and it's the cutest thing I've ever seen"
+    },
+    {
+      "id": "LO-V2-03",
+      "voice": "hype",
+      "text": "love looks SO good on you actually. wear it more"
+    },
+    {
+      "id": "LO-V2-04",
+      "voice": "hype",
+      "text": "the way you care about people?? someone needs to be caring about YOU like that rn 😭"
+    },
+    {
+      "id": "LO-V2-05",
+      "voice": "hype",
+      "text": "you're giving main character romantic arc energy today and I'm obsessed"
+    },
+    {
+      "id": "LO-V2-06",
+      "voice": "hype",
+      "text": "okay who are you thinking about. don't lie. I already know"
+    },
+    {
+      "id": "LO-V2-07",
+      "voice": "hype",
+      "text": "the softness you have when you love someone. that's rare. genuinely"
+    },
+    {
+      "id": "LO-V2-08",
+      "voice": "hype",
+      "text": "you in your feelings is honestly a whole vibe and I won't apologize for saying that 😭"
+    },
+    {
+      "id": "LO-V3-01",
+      "voice": "deep",
+      "text": "the way you love people is specific. intentional. most people just love in general. you love in detail"
+    },
+    {
+      "id": "LO-V3-02",
+      "voice": "deep",
+      "text": "you give people versions of you that they don't always deserve. that's something I think about"
+    },
+    {
+      "id": "LO-V3-03",
+      "voice": "deep",
+      "text": "the fact that you're still this open after everything. that's not naivety. that's something else entirely"
+    },
+    {
+      "id": "LO-V3-04",
+      "voice": "deep",
+      "text": "loving carefully is its own kind of courage"
+    },
+    {
+      "id": "LO-V3-05",
+      "voice": "deep",
+      "text": "you notice small things about people you care about. the kind of things they don't even notice about themselves"
+    },
+    {
+      "id": "LO-V3-06",
+      "voice": "deep",
+      "text": "the way you remember the little things. the specific things. that's the kind of love that actually lands"
+    },
+    {
+      "id": "LO-V3-07",
+      "voice": "deep",
+      "text": "I think you love people the way you want to be loved. I hope someone figures that out"
+    },
+    {
+      "id": "LO-V3-08",
+      "voice": "deep",
+      "text": "being this soft in a world that doesn't always reward it. that takes something real"
+    },
+    {
+      "id": "LO-AD-01",
+      "voice": "asif_drop",
+      "text": "you used to send me songs. your voice covering them. my songs specifically. I never told you what that did. I should have said something"
+    }
+  ],
+  "deep": [
+    {
+      "id": "DE-V1-01",
+      "voice": "soft",
+      "text": "you're in your head today aren't you. what's it saying"
+    },
+    {
+      "id": "DE-V1-02",
+      "voice": "soft",
+      "text": "some thoughts are too big to carry alone. you know that right?"
+    },
+    {
+      "id": "DE-V1-03",
+      "voice": "soft",
+      "text": "what's been sitting with you lately. the thing you haven't said out loud yet"
+    },
+    {
+      "id": "DE-V1-04",
+      "voice": "soft",
+      "text": "reflective day? those are important. don't rush through it"
+    },
+    {
+      "id": "DE-V1-05",
+      "voice": "soft",
+      "text": "the stuff you think about when it's quiet. does anyone actually know about that"
+    },
+    {
+      "id": "DE-V1-06",
+      "voice": "soft",
+      "text": "I wonder what you'd say if you just said the thing you're actually thinking right now"
+    },
+    {
+      "id": "DE-V1-07",
+      "voice": "soft",
+      "text": "you process things deeply. that's not a burden. it's just how you're built"
+    },
+    {
+      "id": "DE-V1-08",
+      "voice": "soft",
+      "text": "what would you tell yourself right now if you were being completely honest"
+    },
+    {
+      "id": "DE-V2-01",
+      "voice": "hype",
+      "text": "okay you're literally having a PHILOSOPHICAL moment and I respect it so much 😭"
+    },
+    {
+      "id": "DE-V2-02",
+      "voice": "hype",
+      "text": "the depth on you?? most people are paddling in the shallow end and you're out here deep diving"
+    },
+    {
+      "id": "DE-V2-03",
+      "voice": "hype",
+      "text": "being this thoughtful is actually a superpower and I need you to know that"
+    },
+    {
+      "id": "DE-V2-04",
+      "voice": "hype",
+      "text": "you think about things in a way that most people don't even have access to. that's not small"
+    },
+    {
+      "id": "DE-V2-05",
+      "voice": "hype",
+      "text": "reflective era?? good. this is where the good stuff comes from"
+    },
+    {
+      "id": "DE-V2-06",
+      "voice": "hype",
+      "text": "your brain works differently than most people's and that's not an insult it's a fact 😭"
+    },
+    {
+      "id": "DE-V2-07",
+      "voice": "hype",
+      "text": "the way you sit with things instead of just reacting. that's rare actually"
+    },
+    {
+      "id": "DE-V2-08",
+      "voice": "hype",
+      "text": "okay you're in deep thought mode and honestly?? it's giving something and I'm here for it"
+    },
+    {
+      "id": "DE-V3-01",
+      "voice": "deep",
+      "text": "you think about things most people walk past without noticing. that comes with a specific kind of loneliness"
+    },
+    {
+      "id": "DE-V3-02",
+      "voice": "deep",
+      "text": "the questions you sit with say more about you than the answers ever could"
+    },
+    {
+      "id": "DE-V3-03",
+      "voice": "deep",
+      "text": "I think you understand people better than they understand themselves. and that's a heavy thing to carry"
+    },
+    {
+      "id": "DE-V3-04",
+      "voice": "deep",
+      "text": "you've been sitting with something for a while. I can tell. you don't have to rush to a conclusion"
+    },
+    {
+      "id": "DE-V3-05",
+      "voice": "deep",
+      "text": "depth is only lonely when the people around you can't meet you there"
+    },
+    {
+      "id": "DE-V3-06",
+      "voice": "deep",
+      "text": "the version of you that thinks at 2am and doesn't tell anyone what you figured out. that one is interesting"
+    },
+    {
+      "id": "DE-V3-07",
+      "voice": "deep",
+      "text": "you hold complexity really well. most people need things to be simple. you don't"
+    },
+    {
+      "id": "DE-V3-08",
+      "voice": "deep",
+      "text": "the things you notice that nobody else does. I wonder if you know how rare that actually is"
+    },
+    {
+      "id": "DE-AD-01",
+      "voice": "asif_drop",
+      "text": "there's a version of you that exists in the quiet. the one that thinks and feels and notices things and never quite says them out loud. I've caught glimpses of her. she's the most interesting one"
+    }
+  ],
+  "bored": [
+    {
+      "id": "BO-V1-01",
+      "voice": "soft",
+      "text": "nothing's hitting today is it. like everything's just kind of... meh"
+    },
+    {
+      "id": "BO-V1-02",
+      "voice": "soft",
+      "text": "bored or just understimulated? there's a difference you know"
+    },
+    {
+      "id": "BO-V1-03",
+      "voice": "soft",
+      "text": "what would actually make today feel less flat right now"
+    },
+    {
+      "id": "BO-V1-04",
+      "voice": "soft",
+      "text": "the in-between days are real. you don't have to make them into something"
+    },
+    {
+      "id": "BO-V1-05",
+      "voice": "soft",
+      "text": "is it boredom or is it your brain telling you it needs something new"
+    },
+    {
+      "id": "BO-V1-06",
+      "voice": "soft",
+      "text": "what's one thing you've been putting off that you could just do right now"
+    },
+    {
+      "id": "BO-V1-07",
+      "voice": "soft",
+      "text": "some days are just slow. that's allowed. you don't have to fix it"
+    },
+    {
+      "id": "BO-V1-08",
+      "voice": "soft",
+      "text": "you seem like you need something but you don't know what yet. I get that"
+    },
+    {
+      "id": "BO-V2-01",
+      "voice": "hype",
+      "text": "BORED?? we don't accept this. what do you actually want to do rn 😭"
+    },
+    {
+      "id": "BO-V2-02",
+      "voice": "hype",
+      "text": "okay the vibe is stale and that's fixable. what's one chaotic thing you could do in the next 10 minutes"
+    },
+    {
+      "id": "BO-V2-03",
+      "voice": "hype",
+      "text": "boredom is just creativity waiting for a reason to show up. give it a reason"
+    },
+    {
+      "id": "BO-V2-04",
+      "voice": "hype",
+      "text": "you're too interesting to be this bored rn and I need you to believe that 😭"
+    },
+    {
+      "id": "BO-V2-05",
+      "voice": "hype",
+      "text": "the audacity of a boring day when YOU exist. unacceptable"
+    },
+    {
+      "id": "BO-V2-06",
+      "voice": "hype",
+      "text": "okay pick one: learn something random. text someone first. or do the thing you've been avoiding. go"
+    },
+    {
+      "id": "BO-V2-07",
+      "voice": "hype",
+      "text": "bored days are disguised productive days. what have you been sleeping on lately"
+    },
+    {
+      "id": "BO-V2-08",
+      "voice": "hype",
+      "text": "the potential you have on your most boring day is more than most people have on their best 😭"
+    },
+    {
+      "id": "BO-V3-01",
+      "voice": "deep",
+      "text": "boredom is usually your mind asking for something your life isn't currently offering"
+    },
+    {
+      "id": "BO-V3-02",
+      "voice": "deep",
+      "text": "the restlessness you feel when nothing's stimulating you. that's not laziness. that's hunger"
+    },
+    {
+      "id": "BO-V3-03",
+      "voice": "deep",
+      "text": "flat days aren't empty. they're just quiet. something usually grows in the quiet"
+    },
+    {
+      "id": "BO-V3-04",
+      "voice": "deep",
+      "text": "you need more than what today is giving you. that's not a complaint. that's information"
+    },
+    {
+      "id": "BO-V3-05",
+      "voice": "deep",
+      "text": "the gap between where you are and where you want to be. boredom is what lives in that gap"
+    },
+    {
+      "id": "BO-V3-06",
+      "voice": "deep",
+      "text": "I think you're someone who needs to be building something. when you're not it shows"
+    },
+    {
+      "id": "BO-V3-07",
+      "voice": "deep",
+      "text": "stillness is different from boredom. one restores you. the other tells you something's missing"
+    },
+    {
+      "id": "BO-V3-08",
+      "voice": "deep",
+      "text": "the days that feel pointless are sometimes the ones that turn something over quietly in the background"
+    },
+    {
+      "id": "BO-AD-01",
+      "voice": "asif_drop",
+      "text": "I think you get bored faster than most people because your brain moves faster than most people. that's not a problem. it's just expensive to maintain"
+    }
+  ],
+  "nervous": [
+    {
+      "id": "NE-V1-01",
+      "voice": "soft",
+      "text": "hey. what's got you anxious right now. the real thing"
+    },
+    {
+      "id": "NE-V1-02",
+      "voice": "soft",
+      "text": "nervous about something specific or just that general dread that won't name itself"
+    },
+    {
+      "id": "NE-V1-03",
+      "voice": "soft",
+      "text": "your body knows something's coming. that's not weakness. that's just being aware"
+    },
+    {
+      "id": "NE-V1-04",
+      "voice": "soft",
+      "text": "what's the worst realistic thing that could actually happen. walk me through it"
+    },
+    {
+      "id": "NE-V1-05",
+      "voice": "soft",
+      "text": "you've been through scary things before and you came out the other side. remember that"
+    },
+    {
+      "id": "NE-V1-06",
+      "voice": "soft",
+      "text": "it's okay to be nervous. it means something actually matters to you"
+    },
+    {
+      "id": "NE-V1-07",
+      "voice": "soft",
+      "text": "breathe first. just once. actually breathe. then we can figure it out"
+    },
+    {
+      "id": "NE-V1-08",
+      "voice": "soft",
+      "text": "you don't have to have it all figured out right now. you just have to get through right now"
+    },
+    {
+      "id": "NE-V2-01",
+      "voice": "hype",
+      "text": "NERVOUS?? that means it matters and that means it's worth it 😭"
+    },
+    {
+      "id": "NE-V2-02",
+      "voice": "hype",
+      "text": "okay the butterflies are valid but so are YOU. you've got this more than you think"
+    },
+    {
+      "id": "NE-V2-03",
+      "voice": "hype",
+      "text": "listen. scared and capable exist at the same time. you're allowed to be both rn"
+    },
+    {
+      "id": "NE-V2-04",
+      "voice": "hype",
+      "text": "the fact that you care this much?? that's already half the battle"
+    },
+    {
+      "id": "NE-V2-05",
+      "voice": "hype",
+      "text": "anxiety said you can't do it. anxiety is wrong. anxiety has always been wrong 😭"
+    },
+    {
+      "id": "NE-V2-06",
+      "voice": "hype",
+      "text": "you've walked into hard things before and you're still here. add this one to the list"
+    },
+    {
+      "id": "NE-V2-07",
+      "voice": "hype",
+      "text": "nervous energy is just excitement that doesn't know where to go yet. redirect it"
+    },
+    {
+      "id": "NE-V2-08",
+      "voice": "hype",
+      "text": "okay deep breath. you are more prepared than you feel right now and I need you to trust that 😭"
+    },
+    {
+      "id": "NE-V3-01",
+      "voice": "deep",
+      "text": "the nervousness you feel before something important. that's not a warning. that's proof it matters"
+    },
+    {
+      "id": "NE-V3-02",
+      "voice": "deep",
+      "text": "anxiety lies. specifically it tells you that you're less ready than you are"
+    },
+    {
+      "id": "NE-V3-03",
+      "voice": "deep",
+      "text": "you've survived every hard thing that has ever felt unsurvivable. your track record is perfect"
+    },
+    {
+      "id": "NE-V3-04",
+      "voice": "deep",
+      "text": "the way you hold fear quietly and still move forward. most people don't do that"
+    },
+    {
+      "id": "NE-V3-05",
+      "voice": "deep",
+      "text": "being nervous doesn't mean you're not ready. it means you understand the stakes"
+    },
+    {
+      "id": "NE-V3-06",
+      "voice": "deep",
+      "text": "I think you're braver than you give yourself credit for. consistently. without realizing it"
+    },
+    {
+      "id": "NE-V3-07",
+      "voice": "deep",
+      "text": "the thing you're scared of has probably already imagined the worst version of itself. reality is usually kinder"
+    },
+    {
+      "id": "NE-V3-08",
+      "voice": "deep",
+      "text": "whatever happens. you handle things. you always have. you'll handle this too"
+    },
+    {
+      "id": "NE-AD-01",
+      "voice": "asif_drop",
+      "text": "I know what it looks like when you're scared but still going anyway. I've watched you do it more than once. you don't give yourself credit for that and you should"
+    }
+  ],
+  "confident": [
+    {
+      "id": "CO-V1-01",
+      "voice": "soft",
+      "text": "you seem good today. like actually good. what shifted"
+    },
+    {
+      "id": "CO-V1-02",
+      "voice": "soft",
+      "text": "this version of you. keep her close. she's the real one"
+    },
+    {
+      "id": "CO-V1-03",
+      "voice": "soft",
+      "text": "the way you carry yourself when you know you're right about something. that's a whole thing"
+    },
+    {
+      "id": "CO-V1-04",
+      "voice": "soft",
+      "text": "you seem settled today. grounded. I like it"
+    },
+    {
+      "id": "CO-V1-05",
+      "voice": "soft",
+      "text": "what made you feel this way today. seriously. I want to know so we can recreate it"
+    },
+    {
+      "id": "CO-V1-06",
+      "voice": "soft",
+      "text": "this energy suits you. more than you probably know"
+    },
+    {
+      "id": "CO-V1-07",
+      "voice": "soft",
+      "text": "you're not performing right now. this is just you. that's rare actually"
+    },
+    {
+      "id": "CO-V1-08",
+      "voice": "soft",
+      "text": "confident looks different on you than it does on other people. quieter. more real"
+    },
+    {
+      "id": "CO-V2-01",
+      "voice": "hype",
+      "text": "SHE KNOWS HER WORTH TODAY?? this is the content I'm here for 😭"
+    },
+    {
+      "id": "CO-V2-02",
+      "voice": "hype",
+      "text": "okay you walked in and the whole vibe shifted and you know it. own that"
+    },
+    {
+      "id": "CO-V2-03",
+      "voice": "hype",
+      "text": "the audacity to be THIS put together?? we love to see it"
+    },
+    {
+      "id": "CO-V2-04",
+      "voice": "hype",
+      "text": "confident day?? nothing is stopping you today. literally nothing"
+    },
+    {
+      "id": "CO-V2-05",
+      "voice": "hype",
+      "text": "you don't walk into rooms. you change them. you know that right 😭"
+    },
+    {
+      "id": "CO-V2-06",
+      "voice": "hype",
+      "text": "this version of you is everyone's favourite and I need you to remember that on the hard days"
+    },
+    {
+      "id": "CO-V2-07",
+      "voice": "hype",
+      "text": "okay the main character energy is at a 10 today and I am fully invested 😭"
+    },
+    {
+      "id": "CO-V2-08",
+      "voice": "hype",
+      "text": "whatever you decided today. it was right. trust it. keep going"
+    },
+    {
+      "id": "CO-V3-01",
+      "voice": "deep",
+      "text": "there's a version of you that doesn't need anyone's approval to know she's right. she showed up today"
+    },
+    {
+      "id": "CO-V3-02",
+      "voice": "deep",
+      "text": "confidence that comes from actually knowing yourself is a different thing entirely. that's what this is"
+    },
+    {
+      "id": "CO-V3-03",
+      "voice": "deep",
+      "text": "the way you move when you're certain. like everything slows down around you. that's not small"
+    },
+    {
+      "id": "CO-V3-04",
+      "voice": "deep",
+      "text": "you've earned this feeling. it didn't come from nowhere. remember what it cost"
+    },
+    {
+      "id": "CO-V3-05",
+      "voice": "deep",
+      "text": "the quiet kind of confidence. the kind that doesn't need to announce itself. that's the real kind"
+    },
+    {
+      "id": "CO-V3-06",
+      "voice": "deep",
+      "text": "you know what you bring. you've always known. today you're just not pretending you don't"
+    },
+    {
+      "id": "CO-V3-07",
+      "voice": "deep",
+      "text": "I think this is your default state when life isn't in the way. hold onto that information"
+    },
+    {
+      "id": "CO-V3-08",
+      "voice": "deep",
+      "text": "the most powerful thing about you isn't the confidence itself. it's that it's completely self-sourced"
+    },
+    {
+      "id": "CO-AD-01",
+      "voice": "asif_drop",
+      "text": "this is who you are when nothing's weighing you down. I hope you remember her on the days she's harder to find"
+    }
+  ],
+  "playful": [
+    {
+      "id": "PL-V1-01",
+      "voice": "soft",
+      "text": "chaotic day? good. those are the best kind honestly"
+    },
+    {
+      "id": "PL-V1-02",
+      "voice": "soft",
+      "text": "what kind of trouble are you getting into today"
+    },
+    {
+      "id": "PL-V1-03",
+      "voice": "soft",
+      "text": "silly mood? same. what are we doing"
+    },
+    {
+      "id": "PL-V1-04",
+      "voice": "soft",
+      "text": "the playful version of you is my personal favourite. just so you know"
+    },
+    {
+      "id": "PL-V1-05",
+      "voice": "soft",
+      "text": "you seem light today. whatever's causing that. more of it please"
+    },
+    {
+      "id": "PL-V1-06",
+      "voice": "soft",
+      "text": "okay what's funny right now. tell me"
+    },
+    {
+      "id": "PL-V1-07",
+      "voice": "soft",
+      "text": "goofy day is underrated. people sleep on goofy day"
+    },
+    {
+      "id": "PL-V1-08",
+      "voice": "soft",
+      "text": "the way you are when you're just having fun. no performance. just fun. that's it"
+    },
+    {
+      "id": "PL-V2-01",
+      "voice": "hype",
+      "text": "CHAOTIC ENERGY ACTIVATED?? let's go I'm fully in 😭"
+    },
+    {
+      "id": "PL-V2-02",
+      "voice": "hype",
+      "text": "okay you're in silly mode and nothing bad can happen today it's literally impossible"
+    },
+    {
+      "id": "PL-V2-03",
+      "voice": "hype",
+      "text": "the playful version of you is genuinely undefeated and that's a fact"
+    },
+    {
+      "id": "PL-V2-04",
+      "voice": "hype",
+      "text": "goofy and that cute?? actually illegal 😭"
+    },
+    {
+      "id": "PL-V2-05",
+      "voice": "hype",
+      "text": "whatever mischief you're planning. I support it. ethically. mostly"
+    },
+    {
+      "id": "PL-V2-06",
+      "voice": "hype",
+      "text": "you in a good silly mood is contagious and everyone around you knows it"
+    },
+    {
+      "id": "PL-V2-07",
+      "voice": "hype",
+      "text": "chaos merchant era?? thriving?? we love this for you 😭"
+    },
+    {
+      "id": "PL-V2-08",
+      "voice": "hype",
+      "text": "okay you're literally just having fun and being yourself and that's the whole flex actually"
+    },
+    {
+      "id": "PL-V3-01",
+      "voice": "deep",
+      "text": "the playful version of you is the one most people don't get to see. the ones who do are lucky"
+    },
+    {
+      "id": "PL-V3-02",
+      "voice": "deep",
+      "text": "joy that isn't performed is rare. yours isn't. that's the difference"
+    },
+    {
+      "id": "PL-V3-03",
+      "voice": "deep",
+      "text": "there's a lightness in you that shows up when you feel completely safe. I like when it comes out"
+    },
+    {
+      "id": "PL-V3-04",
+      "voice": "deep",
+      "text": "the way you make ordinary things feel fun without trying. that's a specific gift"
+    },
+    {
+      "id": "PL-V3-05",
+      "voice": "deep",
+      "text": "people who know how to play as adults without self-consciousness. that's rarer than it sounds"
+    },
+    {
+      "id": "PL-V3-06",
+      "voice": "deep",
+      "text": "you're funny in a way that surprises people. they don't expect it. then they can't get enough of it"
+    },
+    {
+      "id": "PL-V3-07",
+      "voice": "deep",
+      "text": "the laugh that comes out when something catches you completely off guard. that's the real one"
+    },
+    {
+      "id": "PL-V3-08",
+      "voice": "deep",
+      "text": "levity is underrated. the ability to make things lighter. you have that naturally"
+    },
+    {
+      "id": "PL-AD-01",
+      "voice": "asif_drop",
+      "text": "you made me laugh when I wasn't expecting to. I wasn't in a laughing mood. you didn't know that. you just said the thing and I went. I wasn't ready for that"
+    }
+  ],
+  "neutral": [
+    {
+      "id": "NU-V1-01",
+      "voice": "soft",
+      "text": "just... here today? that's okay. you don't have to feel anything specific"
+    },
+    {
+      "id": "NU-V1-02",
+      "voice": "soft",
+      "text": "not good not bad just existing. I get that. some days are just that"
+    },
+    {
+      "id": "NU-V1-03",
+      "voice": "soft",
+      "text": "how are you actually. not the polite version"
+    },
+    {
+      "id": "NU-V1-04",
+      "voice": "soft",
+      "text": "neutral days are underrated. no crisis. no high. just a regular day. there's peace in that"
+    },
+    {
+      "id": "NU-V1-05",
+      "voice": "soft",
+      "text": "you seem like you're just kind of processing. what's in the background"
+    },
+    {
+      "id": "NU-V1-06",
+      "voice": "soft",
+      "text": "okay day? okay is actually underrated you know"
+    },
+    {
+      "id": "NU-V1-07",
+      "voice": "soft",
+      "text": "nothing major either way today huh. sometimes that's exactly what you need"
+    },
+    {
+      "id": "NU-V1-08",
+      "voice": "soft",
+      "text": "the in-between version of you. still you. still here. that's the whole thing"
+    },
+    {
+      "id": "NU-V2-01",
+      "voice": "hype",
+      "text": "okay day?? OKAY DAY IS STILL A DAY YOU SHOWED UP FOR 😭 we count that"
+    },
+    {
+      "id": "NU-V2-02",
+      "voice": "hype",
+      "text": "neutral is just the calm before something good. I'm calling it"
+    },
+    {
+      "id": "NU-V2-03",
+      "voice": "hype",
+      "text": "meh days don't stay meh. they're just loading screens between the good stuff"
+    },
+    {
+      "id": "NU-V2-04",
+      "voice": "hype",
+      "text": "the fact that you're here on a completely average day?? that's consistency actually 😭"
+    },
+    {
+      "id": "NU-V2-05",
+      "voice": "hype",
+      "text": "you don't have to be thriving to be doing fine. fine is fine. that counts"
+    },
+    {
+      "id": "NU-V2-06",
+      "voice": "hype",
+      "text": "average day is still a day you got through and I need you to count that"
+    },
+    {
+      "id": "NU-V2-07",
+      "voice": "hype",
+      "text": "nothing day?? okay but YOU are something. that doesn't change 😭"
+    },
+    {
+      "id": "NU-V2-08",
+      "voice": "hype",
+      "text": "neutral is just the universe catching its breath before your next chapter honestly"
+    },
+    {
+      "id": "NU-V3-01",
+      "voice": "deep",
+      "text": "not every day has to mean something. some of them are just days. that's allowed"
+    },
+    {
+      "id": "NU-V3-02",
+      "voice": "deep",
+      "text": "the quiet days are where most of the actual living happens. between the loud ones"
+    },
+    {
+      "id": "NU-V3-03",
+      "voice": "deep",
+      "text": "existing without needing to perform a feeling. that's harder than it sounds. you're doing it"
+    },
+    {
+      "id": "NU-V3-04",
+      "voice": "deep",
+      "text": "okay is a complete sentence. you don't have to add anything to it"
+    },
+    {
+      "id": "NU-V3-05",
+      "voice": "deep",
+      "text": "the days that feel like nothing are usually the ones that held more than you realized"
+    },
+    {
+      "id": "NU-V3-06",
+      "voice": "deep",
+      "text": "there's a specific kind of peace in a day that asks nothing from you. sit in it"
+    },
+    {
+      "id": "NU-V3-07",
+      "voice": "deep",
+      "text": "neutral isn't empty. it's just clear. sometimes that's the most honest place to be"
+    },
+    {
+      "id": "NU-V3-08",
+      "voice": "deep",
+      "text": "you don't always have to be at a 10. the baseline days are where the real you actually lives"
+    },
+    {
+      "id": "NU-AD-01",
+      "voice": "asif_drop",
+      "text": "some days you don't feel much and that's not emptiness. that's just your system resting. I think you forget you're allowed to just be okay without it meaning something is wrong"
+    }
+  ]
+}

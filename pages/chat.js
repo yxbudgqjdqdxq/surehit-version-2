@@ -1,26 +1,92 @@
-// pages/chat.js
 import React, { useState, useEffect, useRef } from "react";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const OfflineHypeChat = dynamic(() => import('../components/OfflineHypeChat'), { ssr: false });
+const OfflineHypeChat = dynamic(() => import("../components/OfflineHypeChat"), { ssr: false });
 
 export default function ChatPage() {
   const [input, setInput] = useState("");
   const [reply, setReply] = useState(null);
   const [mood, setMood] = useState("neutral");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [lastSentText, setLastSentText] = useState("");
   const cardRef = useRef(null);
   
-  // Controls the Ravens Protocol UI
   const [useOffline, setUseOffline] = useState(false);
 
-  // --- TELL _APP.JS TO STOP MUSIC IF RAVENS IS ON ---
+  const [memPool, setMemPool] = useState({});
+  const [seenIds, setSeenIds] = useState(new Set());
+  const [voiceHistory, setVoiceHistory] = useState([]);
+  const [affirmationCount, setAffirmationCount] = useState(0);
+
+  const moodRef = useRef(mood);
+  const memPoolRef = useRef(memPool);
+
+  useEffect(() => { moodRef.current = mood; }, [mood]);
+  useEffect(() => { memPoolRef.current = memPool; }, [memPool]);
+
+  // Load static database on mount
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: useOffline }));
+    fetch("/data/affirmations.json")
+      .then(res => res.json())
+      .then(data => {
+        setMemPool(data);
+        const pool = data["neutral"] || [];
+        if (pool.length > 0) {
+          const first = pool[Math.floor(Math.random() * pool.length)];
+          setSeenIds(new Set([first.id]));
+          setReply(first.text);
+          setAffirmationCount(1);
+          setVoiceHistory([first.voice]);
+        }
+      })
+      .catch(err => console.error("Database load error:", err));
+  }, []);
+
+  // Background Heartbeat Engine
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const currentMood = moodRef.current;
+      const currentPool = memPoolRef.current[currentMood] || memPoolRef.current["neutral"];
+      if (!currentPool || currentPool.length === 0) return;
+
+      const sampleCards = currentPool.slice(0, 4);
+
+      try {
+        const res = await fetch("/api/affirmations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mood: currentMood, sampleCards })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          if (data.cards && data.cards.length > 0) {
+            const dynamicCards = data.cards.map((c, i) => ({
+              ...c,
+              id: `DYN-${Date.now()}-${i}`
+            }));
+
+            // Silently append to pool
+            setMemPool(prev => {
+              const updated = { ...prev };
+              if (!updated[currentMood]) updated[currentMood] = [];
+              updated[currentMood] = [...updated[currentMood], ...dynamicCards];
+              return updated;
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Background Engine Sync Error:", err);
+      }
+    }, 210000); // 3.5 minutes (doesn't trigger loading overlays)
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("ravens-toggle", { detail: useOffline }));
     return () => {
-        window.dispatchEvent(new CustomEvent('ravens-toggle', { detail: false }));
+        window.dispatchEvent(new CustomEvent("ravens-toggle", { detail: false }));
     };
   }, [useOffline]);
 
@@ -63,64 +129,78 @@ export default function ChatPage() {
     document.body.style.transition = "background 600ms ease";
   }, [mood]);
 
-  async function callApi(message) {
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message || "" })
-      });
-      if (!res.ok) throw new Error("Server error");
-      const data = await res.json();
-      return data.reply ?? "";
-    } catch (err) {
-      setError(String(err));
-      return null;
-    } finally {
-      setLoading(false);
+  const selectNextAffirmation = (targetMood) => {
+    const pool = memPool[targetMood] || memPool["neutral"] || [];
+    const available = pool.filter(c => !seenIds.has(c.id));
+
+    if (available.length === 0) {
+      return "That’s all I’ve got for tonight. Come back tomorrow.";
     }
-  }
 
-  useEffect(() => {
-    (async () => {
-      const initial = await callApi("");
-      if (initial) setReply(initial);
-    })();
-  }, []);
+    const nextCount = affirmationCount + 1;
+    let chosen = null;
 
-  const handleSend = async (e) => {
+    // Asif Drop purely on the 8th count
+    if (nextCount % 8 === 0) {
+      const asifDrops = available.filter(c => c.voice === "asif_drop");
+      if (asifDrops.length > 0) {
+        chosen = asifDrops[Math.floor(Math.random() * asifDrops.length)];
+      }
+    }
+
+    // Normal rotation unpredictability - ensure no back-to-back same voice
+    if (!chosen) {
+      let forbiddenVoice = voiceHistory.length > 0 ? voiceHistory[voiceHistory.length - 1] : null;
+      let candidates = available.filter(c => c.voice !== forbiddenVoice && c.voice !== "asif_drop");
+      
+      // Fallbacks if filtered too tightly
+      if (candidates.length === 0) candidates = available.filter(c => c.voice !== "asif_drop");
+      if (candidates.length === 0) candidates = available;
+
+      chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+    setSeenIds(prev => new Set(prev).add(chosen.id));
+    setAffirmationCount(nextCount);
+    setVoiceHistory(prev => [...prev, chosen.voice].slice(-5));
+
+    return chosen.text;
+  };
+
+  const handleSend = (e) => {
     e && e.preventDefault();
-    setError(null);
     const text = input.trim();
     if (!text) { setReply("say something my love"); return; }
     if (isEmojiOnly(text)) { setReply("Sorry?"); setInput(""); return; }
     if (text === lastSentText) { setReply("say something my love"); setInput(""); return; }
 
+    const newMood = detectMoodLocal(text);
     setLastSentText(text);
     setInput("");
-    setMood(detectMoodLocal(text));
-    setLoading(true);
-    const r = await callApi(text);
-    if (r !== null) setReply(r);
+    setMood(newMood);
+    
+    const ans = selectNextAffirmation(newMood);
+    setReply(ans);
+
     if (cardRef.current) {
       cardRef.current.animate([{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }], { duration: 420 });
     }
   };
 
-  const handleAnother = async () => {
-    const target = lastSentText || "";
-    setMood(detectMoodLocal(target));
-    setLoading(true);
-    const r = await callApi(target);
-    if (r !== null) setReply(r);
-    setLoading(false);
+  const handleAnother = () => {
+    const targetMood = lastSentText ? detectMoodLocal(lastSentText) : mood;
+    setMood(targetMood);
+    const ans = selectNextAffirmation(targetMood);
+    setReply(ans);
+
+    if (cardRef.current) {
+      cardRef.current.animate([{ transform: "translateY(8px)", opacity: 0 }, { transform: "translateY(0px)", opacity: 1 }], { duration: 420 });
+    }
   };
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      {useOffline ? <OfflineHypeChat personaName={'Ayesha'} /> : null}
+      {useOffline ? <OfflineHypeChat personaName={"Ayesha"} /> : null}
 
       <div style={{ width: "100%", maxWidth: 920 }}>
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
@@ -132,19 +212,19 @@ export default function ChatPage() {
         </header>
 
         <main ref={cardRef} style={{ background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: 30, minHeight: 240, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}>
-          {loading ? <div style={{ textAlign: "center", color: "#333" }}>Hypeman is thinking…</div> : 
-            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", whiteSpace: "pre-wrap" }}>{reply || "Type how you feel — I’ll say the rest."}</div>
+          {!reply ? <div style={{ textAlign: "center", color: "#333" }}>Hypeman is waking up…</div> : 
+            <div style={{ fontFamily: "Georgia, serif", fontSize: "clamp(18px, 2.2vw, 22px)", textAlign: "center", color: "#111", lineHeight: "1.4", whiteSpace: "pre-wrap" }}>{reply}</div>
           }
           <div style={{ marginTop: 12, textAlign: "center", color: "rgba(0,0,0,0.45)" }}>Mood: <strong style={{ textTransform: "capitalize" }}>{mood}</strong></div>
         </main>
 
         <form onSubmit={handleSend} style={{ display: "flex", gap: 12, marginTop: 16 }}>
-          <input value={input} onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} placeholder="Type how you're feeling..." style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }} disabled={loading} />
-          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>{loading ? "Sending…" : "Send"}</button>
+          <input value={input} onChange={(e) => { setInput(e.target.value); setMood(detectMoodLocal(e.target.value)); }} placeholder="Type how you are feeling..." style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.06)" }} disabled={loading} />
+          <button type="submit" disabled={loading} style={{ padding: "12px 18px", borderRadius: 12, border: "none", background: "#b21b61", color: "#fff", fontWeight: 700 }}>Send</button>
         </form>
 
         <div style={{ textAlign: "center", marginTop: 40 }}>
-           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85, transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+           <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", opacity: 0.85, transition: "transform 0.2s" }} onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.02)"} onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}>
              <img src="/ravens-star.png" alt="Ravens" style={{ width: "32px", height: "32px", objectFit: "contain", display: "block" }} />
              <span style={{ fontSize: "15px", fontWeight: 500, color: "#444", fontFamily: "Inter, sans-serif" }}>Switch to Ravens Protocol</span>
            </button>
