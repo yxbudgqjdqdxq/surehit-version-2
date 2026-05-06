@@ -322,8 +322,7 @@ export default function ChatPage() {
 
         <div style={{ textAlign: "center", marginTop: 40 }}>
            <button onClick={() => setUseOffline(true)} style={{ background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 20px", transition: "transform 0.3s ease", opacity: 0.7 }} onMouseOver={(e) => {e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.opacity = "1"}} onMouseOut={(e) => {e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.opacity = "0.7"}}>
-             <img src="/ravens-star.png" alt="Ravens" style={{ width: "24px", height: "24px", objectFit: "contain", display: "block", filter: "grayscale(100%) opacity(0.8)" }} />
-             <span style={{ fontSize: "13px", fontWeight: 400, color: "#5a4a4e", fontFamily: "'Lato', sans-serif", letterSpacing: "0.5px" }}>Switch to Ravens Protocol</span>
+             <span style={{ fontSize: "12px", fontWeight: 300, color: "#5a4a4e", fontFamily: "'DM Sans', sans-serif", letterSpacing: "2px", textTransform: "uppercase" }}>Enter Shin-gan Sō-ai</span>
            </button>
         </div>
       </div>

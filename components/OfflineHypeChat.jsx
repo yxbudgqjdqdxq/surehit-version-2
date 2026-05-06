@@ -1,7 +1,12 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 
-/* Updated purely local implementation */
+/**
+ * SHIN-GAN SŌ-AI - CLOUD UPLINK 
+ * * ARCHITECTURE: Groq Cloud API.
+ * * SPEED: <1s Response Time.
+ * * UI: Authentic and counterfeit mutual love design.
+ */
 
 export default function RavensProtocolPage() {
   // --- STATE ---
@@ -109,145 +114,212 @@ export default function RavensProtocolPage() {
   const isHeroMode = messages.length === 0;
 
   return (
-    <div className="ravens-root">
+    <div className="shingan-root">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
         
         .site-header { display: none !important; }
         
-        .ravens-root {
+        @keyframes bleedIn {
+          0% { opacity: 0; filter: blur(10px); transform: scale(1.05); }
+          100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+        }
+        
+        @keyframes smokeOut {
+          0% { opacity: 1; filter: blur(0px); transform: translateY(0); }
+          100% { opacity: 0; filter: blur(20px); transform: translateY(-20px); }
+        }
+        
+        @keyframes waveform {
+          0%, 100% { height: 4px; opacity: 0.4; }
+          50% { height: 14px; opacity: 1; }
+        }
+
+        @keyframes fadeInShift {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .shingan-root {
           position: fixed; top: 0; left: 0; right: 0; bottom: 0;
           width: 100vw; height: 100vh;
-          background-color: #0f2123; color: white;
-          font-family: 'Inter', sans-serif;
+          /* The background: very deep desaturated Ruby Petals (#A55166) -> #1a080d */
+          background-color: #1a080d; 
+          color: #F7DAE7;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 300;
           z-index: 2147483647;
           display: flex; flex-direction: column; overflow: hidden;
+          transition: background-color 1.5s ease;
         }
 
-        .ravens-bg { position: absolute; inset: 0; z-index: 0; opacity: 0.4; pointer-events: none; }
-        .ravens-bg img { width: 100%; height: 100%; object-fit: cover; }
-        .ravens-overlay { position: absolute; inset: 0; background: rgba(15, 33, 35, 0.8); }
+        /* Tense background shift when idle is handled programmatically, but base transitions are smooth */
 
-        .ravens-header {
-          position: relative; z-index: 10; display: flex; justify-content: space-between; 
-          align-items: center; padding: 20px 40px;
+        .shingan-header {
+          position: relative; z-index: 10; display: flex; justify-content: center; 
+          align-items: center; padding: 24px;
+          animation: ${isHeroMode ? 'none' : 'fadeInShift 0.8s ease forwards'};
         }
-        .ravens-brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; }
-        
-        .ravens-main {
+        .shingan-brand {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 400; font-size: 16px;
+          letter-spacing: 4px; color: #F7DAE7;
+          opacity: 0.6;
+        }
+
+        .shingan-main {
           position: relative; z-index: 10; flex: 1; display: flex; flex-direction: column;
-          padding-top: 60px; padding-bottom: 120px; overflow-y: auto; scrollbar-width: none;
+          padding-top: 20px; padding-bottom: 120px; overflow-y: auto; scrollbar-width: none;
         }
-        .ravens-main::-webkit-scrollbar { display: none; }
+        .shingan-main::-webkit-scrollbar { display: none; }
 
-        .ravens-hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 20px; }
-        .ravens-title { font-size: 48px; font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
-        .ravens-accent { color: #00e5ff; }
-        .ravens-subtitle { font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 48px; }
+        /* The Hero Void Entry Sequence */
+        .shingan-hero { 
+          display: flex; flex-direction: column; align-items: center; 
+          justify-content: center; height: 70vh; text-align: center;
+        }
+        .hero-kanji {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 4rem; color: #F7DAE7; font-weight: 300;
+          letter-spacing: 12px; margin-bottom: 12px;
+          display: flex;
+        }
+        .kanji-char { opacity: 0; animation: bleedIn 2s ease forwards; }
+        .kanji-char:nth-child(1) { animation-delay: 0.5s; }
+        .kanji-char:nth-child(2) { animation-delay: 0.9s; }
+        .kanji-char:nth-child(3) { animation-delay: 1.3s; }
+        .kanji-char:nth-child(4) { animation-delay: 1.7s; }
 
-        .ravens-bubble-container {
-          display: flex; align-items: flex-start; gap: 16px;
-          background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-          backdrop-filter: blur(10px); padding: 16px; border-radius: 16px; border-top-left-radius: 4px;
+        .hero-romaji {
+          font-family: 'DM Sans', sans-serif; font-weight: 100;
+          font-size: 0.9rem; letter-spacing: 8px; color: #E2B4C1;
+          opacity: 0; animation: bleedIn 2s ease forwards;
+          animation-delay: 2.5s; margin-left: 8px; /* account for tracking */
         }
 
-        .ravens-chat-list { max-width: 800px; margin: 0 auto; width: 100%; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; }
-        .ravens-msg { display: flex; gap: 16px; align-items: flex-start; }
-        .ravens-msg.user { flex-direction: row-reverse; }
+        .hero-translation {
+          font-family: 'DM Sans', sans-serif; font-weight: 100; font-style: italic;
+          font-size: 0.75rem; letter-spacing: 2px; color: #D38C9D;
+          opacity: 0; animation: bleedIn 2s ease forwards;
+          animation-delay: 4.5s; margin-top: 24px;
+        }
         
-        .ravens-msg-bubble {
-          background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-          padding: 16px; border-radius: 16px; line-height: 1.6; font-size: 15px; max-width: 80%;
-          white-space: pre-wrap;
+        .hero-layer {
+           animation: ${input.length > 0 ? 'smokeOut 2s ease forwards' : 'none'};
         }
-        .ravens-msg.bot .ravens-msg-bubble { border-top-left-radius: 4px; color: rgba(255,255,255,0.9); }
-        .ravens-msg.user .ravens-msg-bubble { border-top-right-radius: 4px; background: #00e5ff; color: #000; font-weight: 500; border: none; }
 
-        .ravens-input-wrapper {
+        /* Message Layout */
+        .shingan-chat-list { 
+          max-width: 600px; margin: 0 auto; width: 100%; padding: 0 24px; 
+          display: flex; flex-direction: column; gap: 32px; 
+          animation: fadeInShift 0.8s ease forwards;
+        }
+        
+        .shingan-msg { display: flex; width: 100%; }
+        .shingan-msg.user { justify-content: flex-end; }
+        .shingan-msg.bot { justify-content: flex-start; }
+        
+        .shingan-bubble.user {
+          background: rgba(226, 180, 193, 0.15); /* Bubblegum slightly transparent */
+          border: 1px solid rgba(226, 180, 193, 0.2);
+          color: #E2B4C1;
+          padding: 12px 20px; border-radius: 20px;
+          border-bottom-right-radius: 4px; font-size: 15px; max-width: 75%;
+          line-height: 1.5; font-weight: 300;
+          animation: fadeInShift 0.5s ease forwards;
+        }
+
+        .shingan-bubble.bot {
+          color: #F7DAE7; /* Pink Mist */
+          font-size: 15px; max-width: 85%;
+          line-height: 1.6; font-weight: 300;
+          white-space: pre-wrap; letter-spacing: 0.2px;
+        }
+
+        .shingan-input-wrapper {
           position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-          background: linear-gradient(to top, #0f2123 20%, transparent);
-          padding: 20px 20px 40px 20px; display: flex; justify-content: center;
+          padding: 20px 24px 40px 24px; display: flex; justify-content: center;
+          animation: fadeInShift 1s ease forwards;
+          background: linear-gradient(to top, rgba(26, 8, 13, 0.9) 30%, transparent);
         }
-        .ravens-input-box {
-          width: 100%; max-width: 900px; position: relative;
-          background: rgba(0,0,0,0.4); backdrop-filter: blur(20px);
-          border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
-          display: flex; align-items: center; transition: border-color 0.2s;
+        .shingan-input-box {
+          width: 100%; max-width: 600px; position: relative;
+          background: rgba(165, 81, 102, 0.05); /* Ruby petals tint */
+          border-top: 1px solid rgba(165, 81, 102, 0.3); /* 1px border */
+          display: flex; align-items: center; 
         }
-        .ravens-input-box:focus-within { border-color: rgba(0, 229, 255, 0.5); }
-        .ravens-input {
-          width: 100%; height: 56px; background: transparent; border: none; outline: none;
-          color: white; padding: 0 24px; font-size: 16px;
+        
+        .shingan-input {
+          width: 100%; height: 50px; background: transparent; border: none; outline: none;
+          color: #F7DAE7; padding: 0 16px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+          font-weight: 300; caret-color: #D38C9D;
         }
-        .ravens-send-btn {
-          height: 40px; width: 40px; margin-right: 8px; background: #00e5ff;
-          border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-          cursor: pointer; color: #000;
+        .shingan-input::placeholder { color: rgba(247, 218, 231, 0.3); font-weight: 100; }
+        
+        .shingan-send-btn {
+          height: 36px; width: 36px; margin-right: 8px; background: transparent;
+          border: none; display: flex; align-items: center; justify-content: center;
+          cursor: pointer; color: #A55166; transition: color 0.3s;
         }
-        .ravens-send-btn:disabled { background: #333; cursor: not-allowed; }
+        .shingan-send-btn:hover { color: #E2B4C1; }
+        .shingan-send-btn:disabled { color: rgba(165, 81, 102, 0.2); cursor: not-allowed; }
 
-        .status-pill {
-            padding: 4px 8px; border-radius: 4px; font-size: 10px; font-family: monospace;
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+        .typing-indicator {
+          display: inline-flex; align-items: center; gap: 3px; height: 16px; margin-left: 6px;
         }
-        .status-pill.good { color: #00e5ff; border-color: #00e5ff; }
-
-        .typing-cursor::after {
-          content: '▋'; display: inline-block; vertical-align: middle;
-          animation: blink 1s step-start infinite; color: #00e5ff; margin-left: 2px;
+        .typing-line {
+          width: 1px; background-color: #D38C9D;
+          animation: waveform 1s ease-in-out infinite;
         }
-        @keyframes blink { 50% { opacity: 0; } }
+        .typing-line:nth-child(1) { animation-delay: 0s; animation-duration: 1.2s; }
+        .typing-line:nth-child(2) { animation-delay: 0.3s; animation-duration: 0.9s; }
+        .typing-line:nth-child(3) { animation-delay: 0.1s; animation-duration: 1.1s; }
       `}</style>
 
-      <div className="ravens-bg">
-        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2000&auto=format&fit=crop" alt="nebula" />
-        <div className="ravens-overlay"></div>
-      </div>
-
-      <header className="ravens-header">
-        <div className="ravens-brand">
-          <span style={{color: '#00e5ff', fontSize: '24px', marginRight: '8px'}}>✦</span>
-          <span>Ravens Protocol</span>
-        </div>
-        
-        <div style={{display:'flex', gap:'8px', alignItems:'center'}}>
-            <div className="status-pill good">ONLINE</div>
-        </div>
+      <header className="shingan-header">
+        <div className="shingan-brand">真贋相愛</div>
       </header>
 
-      <main className="ravens-main">
+      <main className="shingan-main">
         {isHeroMode && (
-          <div className="ravens-hero animate-in fade-in zoom-in duration-500">
-            <h1 className="ravens-title">Ravens Protocol — <br/><span className="ravens-accent">Know him from me</span></h1>
-            <p className="ravens-subtitle">What's bothering you recently?</p>
-            <div className="ravens-bubble-container">
-              <div style={{width:'32px', height:'32px', background:'rgba(0,229,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', color:'#00e5ff'}}>✦</div>
-              <div>
-                <p style={{color:'#00e5ff', fontSize:'12px', fontWeight:'bold', marginBottom:'4px'}}>Ravens Protocol</p>
-                <p>Greetings.</p>
-              </div>
+          <div className="shingan-hero hero-layer">
+            <div className="hero-kanji">
+              <span className="kanji-char">真</span>
+              <span className="kanji-char">贋</span>
+              <span className="kanji-char">相</span>
+              <span className="kanji-char">愛</span>
             </div>
+            <div className="hero-romaji">shin-gan sō-ai</div>
+            <div className="hero-translation">"authentic and counterfeit mutual love"</div>
           </div>
         )}
 
-        <div className="ravens-chat-list">
+        <div className="shingan-chat-list">
           {messages.map((m, i) => (
-            <div key={i} className={`ravens-msg ${m.role === 'user' ? 'user' : 'bot'}`}>
-              <div className="ravens-msg-bubble">
+            <div key={i} className={`shingan-msg ${m.role === 'user' ? 'user' : 'bot'}`}>
+              <div className={`shingan-bubble ${m.role === 'user' ? 'user' : 'bot'}`}>
                 {m.content}
                 {m.role === "assistant" && i === messages.length - 1 && (
                     (status === "GENERATING") || (displayedRef.current.length < streamRef.current.length)
                 ) && (
-                    <span className="typing-cursor"></span>
+                    <span className="typing-indicator">
+                      <span className="typing-line"></span>
+                      <span className="typing-line"></span>
+                      <span className="typing-line"></span>
+                    </span>
                 )}
               </div>
             </div>
           ))}
           
           {status === "GENERATING" && displayedRef.current === "" && (
-             <div className="ravens-msg bot">
-               <div className="ravens-msg-bubble" style={{color: '#00e5ff', fontStyle:'italic'}}>
-                 Computing...
+             <div className="shingan-msg bot">
+               <div className="shingan-bubble bot" style={{ display: 'flex', alignItems: 'center' }}>
+                 <span className="typing-indicator">
+                    <span className="typing-line"></span>
+                    <span className="typing-line"></span>
+                    <span className="typing-line"></span>
+                 </span>
                </div>
              </div>
           )}
@@ -255,25 +327,28 @@ export default function RavensProtocolPage() {
         </div>
       </main>
 
-      <div className="ravens-input-wrapper">
-        <div className="ravens-input-box">
+      <div className="shingan-input-wrapper">
+        <div className="shingan-input-box">
           <input 
-            className="ravens-input"
-            placeholder="Ask Ravens Protocol anything..."
+            className="shingan-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             disabled={status === "GENERATING"}
+            spellCheck="false"
           />
           <button 
-            className="ravens-send-btn"
+            className="shingan-send-btn"
             onClick={handleSend}
             disabled={!input.trim() || status === "GENERATING"}
           >
             {status === "GENERATING" ? (
-              <div style={{width:'16px', height:'16px', border:'2px solid black', borderTopColor:'transparent', borderRadius:'50%'}} className="animate-spin"></div>
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1}>
+                 <circle cx="12" cy="12" r="10" strokeOpacity="0.2" />
+                 <path d="M12 2a10 10 0 0 1 10 10" className="animate-spin" />
+               </svg>
             ) : (
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             )}
