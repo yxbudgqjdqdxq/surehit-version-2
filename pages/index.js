@@ -15,9 +15,8 @@ export default function Home() {
   }
 
   function openSecret() {
-    setPw("");
-    setPwError("");
-    setShowModal(true);
+    // Immediately push to vault page where the new dark UI handles everything
+    router.push("/vault");
   }
 
   function submitPw(e) {
@@ -68,36 +67,16 @@ export default function Home() {
             onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 14px 40px rgba(165, 81, 102, 0.35)"; }}
             onMouseOut={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 10px 30px rgba(165, 81, 102, 0.25)"; }}
           >
-            click this when you are super duper sad
+            <svg style={{display:"block", margin:"0 auto"}} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
           </button>
         </div>
       )}
 
       {showModal && (
         <div style={{
-          position: "fixed", inset: 0, background: "rgba(0,0,0,0.34)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 60
+          position: "fixed", inset: 0, background: "#5A2F3A", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 60
         }}>
-          <div style={{ width: "min(680px, 92%)", background: "#fff", padding: 22, borderRadius: 12, boxShadow: "0 20px 60px rgba(0,0,0,0.18)" }}>
-            <h3 style={{ margin: 0 }}>Secret Vault</h3>
-            <p style={{ color: "rgba(0,0,0,0.6)" }}>Enter the password to reveal a private message.</p>
-
-            <form onSubmit={submitPw} style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              <input
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
-                placeholder="Password"
-                autoFocus
-                style={{ flex: 1, padding: 10, borderRadius: 8, border: "1px solid rgba(0,0,0,0.08)" }}
-              />
-              <button style={{ padding: "10px 12px", borderRadius: 8, border: "none", background: "#b21b61", color: "#fff" }}>Open</button>
-            </form>
-
-            {pwError && <div style={{ color: "crimson", marginTop: 10 }}>{pwError}</div>}
-
-            <div style={{ marginTop: 14, textAlign: "right" }}>
-              <button onClick={() => setShowModal(false)} style={{ background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>Cancel</button>
-            </div>
-          </div>
+          { /* We don't render the form here anymore, the router push will handle it immediately for aesthetic transition */ }
         </div>
       )}
     </main>
