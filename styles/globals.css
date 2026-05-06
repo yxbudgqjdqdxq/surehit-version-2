@@ -20,16 +20,16 @@ body::before{
   position: fixed;
   inset: 0;
   z-index: -2;
-  background: linear-gradient(120deg, #F7DAE7 0%, #E2B4C1 25%, #D38C9D 50%, #A55166 75%, #F7DAE7 100%);
-  background-size: 600% 600%;
-  animation: gradientShift 40s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
-  opacity: 0.98;
+  background: linear-gradient(140deg, #F7DAE7, #E2B4C1, #F7DAE7, #D38C9D, #F7DAE7);
+  background-size: 400% 400%;
+  animation: gradientFluid 15s ease infinite;
+  opacity: 0.95;
   pointer-events: none;
 }
-@keyframes gradientShift{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+@keyframes gradientFluid {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* animated blobs */
@@ -37,15 +37,33 @@ body::before{
 .animated-bg .blob {
   position:absolute;
   border-radius:50%;
-  filter: blur(88px);
-  opacity: 0.9;
-  transform: translate3d(0,0,0);
-  will-change: transform, opacity;
-  transition: transform .9s ease;
+  filter: blur(100px);
+  opacity: 0.8;
+  will-change: transform;
+  animation: floatMorph 20s infinite alternate ease-in-out;
 }
-.animated-bg .blob1{ width:900px;height:900px; left:-260px; top:-240px; background: radial-gradient(circle at 30% 30%, rgba(211, 140, 157, 0.5), rgba(226, 180, 193, 0.2) 40%, transparent 60%); }
-.animated-bg .blob2{ width:560px;height:560px; right:-180px; top:40px; background: radial-gradient(circle at 40% 30%, rgba(165, 81, 102, 0.3), rgba(211, 140, 157, 0.15) 45%, transparent 70%); }
-.animated-bg .blob3{ width:480px;height:480px; left:40%; bottom:-160px; transform:translateX(-30%); background: radial-gradient(circle at 50% 50%, rgba(247, 218, 231, 0.4), rgba(226, 180, 193, 0.1) 50%, transparent 80%); }
+
+@keyframes floatMorph {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-40px) scale(1.1); }
+  100% { transform: translateY(20px) scale(0.95); }
+}
+
+.animated-bg .blob1{ 
+  width:800px; height:800px; left:-200px; top:-200px; 
+  background: radial-gradient(circle, rgba(165, 81, 102, 0.25) 0%, transparent 70%); 
+  animation-delay: 0s;
+}
+.animated-bg .blob2{ 
+  width:700px; height:700px; right:-150px; bottom:-100px; 
+  background: radial-gradient(circle, rgba(211, 140, 157, 0.4) 0%, transparent 70%); 
+  animation-delay: -5s;
+}
+.animated-bg .blob3{ 
+  width:600px; height:600px; left:30%; top:20%; 
+  background: radial-gradient(circle, rgba(226, 180, 193, 0.5) 0%, transparent 60%); 
+  animation-delay: -10s;
+}
 .animated-bg .bg-noise{ position:absolute; inset:0; background-image: radial-gradient(rgba(0,0,0,0.015) 1px, transparent 1px); background-size:3px 3px; mix-blend-mode: overlay; opacity: 0.45; }
 
 .site-root { position: relative; z-index: 2; min-height: 100vh; display:flex; align-items:center; justify-content:center; }
