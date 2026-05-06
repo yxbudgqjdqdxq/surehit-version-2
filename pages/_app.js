@@ -57,6 +57,17 @@ export default function MyApp({ Component, pageProps }) {
           allowFullScreen
           loading="lazy"
         />
+        <div className="spotify-note">
+          Best enjoyed while logged into Spotify in your browser! <3
+          <a
+            className="spotify-fallback"
+            href="https://open.spotify.com/playlist/4ynbsNBDEnc5Pyg8Dm4szL"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Play on Spotify
+          </a>
+        </div>
       </div>
 
     </>

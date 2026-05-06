@@ -158,6 +158,19 @@ body::before{
   border: 0;
   border-radius: 12px;
 }
+.spotify-note{
+  margin-top: 6px;
+  font-size: 12px;
+  text-align: center;
+  color:#231b20;
+}
+.spotify-fallback{
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 700;
+  color:#1db954;
+  text-decoration: none;
+}
 @keyframes heart-glow {
   0%, 100% { box-shadow: 0 0 10px rgba(30, 215, 96, 0.4); transform: scale(1); }
   50% { box-shadow: 0 0 30px rgba(30, 215, 96, 0.8); transform: scale(1.05); }
