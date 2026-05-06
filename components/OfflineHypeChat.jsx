@@ -192,7 +192,7 @@ export default function RavensProtocolPage() {
           letter-spacing: 12px; margin-bottom: 12px;
           display: flex;
         }
-        .kanji-char { opacity: 0; animation: bleedIn 2s ease forwards; }
+        .kanji-char { animation: bleedIn 2s ease both; }
         .kanji-char:nth-child(1) { animation-delay: 0.5s; }
         .kanji-char:nth-child(2) { animation-delay: 0.9s; }
         .kanji-char:nth-child(3) { animation-delay: 1.3s; }
@@ -201,15 +201,24 @@ export default function RavensProtocolPage() {
         .hero-romaji {
           font-family: 'DM Sans', sans-serif; font-weight: 100;
           font-size: 0.9rem; letter-spacing: 8px; color: #E2B4C1;
-          opacity: 0; animation: bleedIn 2s ease forwards;
+          animation: bleedIn 2s ease both;
           animation-delay: 2.5s; margin-left: 8px; /* account for tracking */
         }
 
         .hero-translation {
           font-family: 'DM Sans', sans-serif; font-weight: 100; font-style: italic;
           font-size: 0.75rem; letter-spacing: 2px; color: #D38C9D;
-          opacity: 0; animation: bleedIn 2s ease forwards;
+          animation: bleedIn 2s ease both;
           animation-delay: 4.5s; margin-top: 24px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .kanji-char, .hero-romaji, .hero-translation {
+            animation: none !important;
+            opacity: 1 !important;
+            filter: blur(0px) !important;
+            transform: scale(1) !important;
+          }
         }
 
         /* Message Layout */
@@ -255,10 +264,10 @@ export default function RavensProtocolPage() {
         
         .shingan-input {
           width: 100%; height: 50px; background: transparent; border: none; outline: none;
-          color: #F7DAE7; padding: 0 16px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+          color: #F7DAE7; padding: 0 16px; font-size: 15px; font-family: 'DM Sans', sans-serif;
           font-weight: 300; caret-color: #D38C9D;
         }
-        .shingan-input::placeholder { color: rgba(247, 218, 231, 0.3); font-weight: 100; }
+        .shingan-input::placeholder { color: rgba(247, 218, 231, 0.5); font-weight: 300; font-style: italic; letter-spacing: 0.5px; opacity: 1; }
         
         .shingan-send-btn {
           height: 36px; width: 36px; margin-right: 8px; background: transparent;
@@ -338,6 +347,7 @@ export default function RavensProtocolPage() {
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             disabled={status === "GENERATING"}
             spellCheck="false"
+            placeholder="say something unique..."
           />
           <button 
             className="shingan-send-btn"
